@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQ-Aid v2.0 — Interactive Mobile Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 60%, #020617 100%);
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Top Control Bar */
+    .prototype-bar {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 10px 20px;
+      border-radius: 999px;
+      color: #f8fafc;
+      font-size: 13px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .prototype-bar .badge {
+      background: #10b981;
+      color: #022c22;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+    }
+    .prototype-bar button {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .prototype-bar button:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* iPhone 16 Frame */
+    .phone-chassis {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      background: #000;
+      border-radius: 54px;
+      padding: 12px;
+      box-shadow: 
+        0 0 0 2px #475569,
+        0 0 0 6px #0f172a,
+        0 25px 50px -12px rgba(0, 0, 0, 0.7),
+        0 0 100px rgba(220, 38, 38, 0.15);
+      overflow: hidden;
+    }
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #f8fafc;
+      border-radius: 44px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 32px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      color: #fff;
+      font-size: 11px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dynamic-island .camera {
+      width: 11px;
+      height: 11px;
+      background: #1e293b;
+      border-radius: 50%;
+      box-shadow: inset 0 0 3px #0284c7;
+    }
+
+    /* Screen Views Manager */
+    .screen-container {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .screen-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #f8fafc;
+      display: none;
+      flex-direction: column;
+      padding: 50px 16px 24px 16px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+    .screen-view.active {
+      display: flex;
+      transform: translateX(0);
+      opacity: 1;
+      z-index: 10;
+    }
+    .screen-view.slide-left {
+      transform: translateX(-100%);
+    }
+    .screen-view.slide-right {
+      transform: translateX(100%);
+    }
+
+    /* App Bar */
+    .app-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+    }
+    .app-bar h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+    .app-bar .sub {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover {
+      background: #f1f5f9;
+      transform: scale(0.96);
+    }
+
+    /* Status Pill */
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      font-size: 11.5px;
+      color: #92400e;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* Hero SOS Card */
+    .hero-sos-card {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      border-radius: 20px;
+      padding: 18px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.45);
+      margin-bottom: 12px;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .hero-sos-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px rgba(220, 38, 38, 0.55);
+    }
+    .sos-beacon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      animation: pulse-ring 2s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
+    /* Dark CPR Card */
+    .cpr-card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 16px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      transition: all 0.2s;
+    }
+    .cpr-card:hover {
+      transform: translateY(-2px);
+      background: #1e293b;
+    }
+    .heart-beacon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(220, 38, 38, 0.2);
+      border: 1.5px solid #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #ef4444;
+    }
+
+    /* Bento 4-Grid */
+    .bento-title {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+      color: #475569;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .bento-item {
+      padding: 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+    }
+    .bento-item:hover {
+      transform: translateY(-2px);
+    }
+    .bento-choking { background: #fffbeb; border: 1px solid #fde68a; }
+    .bento-drowning { background: #f0f9ff; border: 1px solid #bae6fd; }
+    .bento-electric { background: #fef3c7; border: 1px solid #fde68a; }
+    .bento-burns { background: #fff1f2; border: 1px solid #fecdd3; }
+
+    /* Generic Card */
+    .info-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      transition: all 0.15s;
+    }
+    .info-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    /* AMOLED CPR SCREEN */
+    .screen-cpr {
+      background: #070b14 !important;
+      color: #f8fafc;
+    }
+    .cpr-hud-box {
+      background: #131d31;
+      border: 1px solid #24324d;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      margin-bottom: 24px;
+    }
+    .cpr-metronome-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .cpr-pulse-ring {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #dc2626 0%, #7f1d1d 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
+      transition: transform 0.1s ease-out;
+    }
+    .cpr-pulse-ring.beat {
+      transform: scale(1.08);
+      box-shadow: 0 0 60px rgba(239, 68, 68, 0.9);
+    }
+    .cpr-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 16px;
+    }
+
+    /* Triage Chip */
+    .chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 20px 0;
+    }
+    .chip {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .chip.active {
+      background: #dc2626;
+      border-color: #dc2626;
+      color: white;
+    }
+
+    @keyframes scanMove {
+      0% { top: 12%; }
+      50% { top: 88%; }
+      100% { top: 12%; }
+    }
+    .scanner-laser {
+      position: absolute;
+      left: 0; right: 0;
+      height: 3px;
+      background: #38bdf8;
+      box-shadow: 0 0 14px #38bdf8, 0 0 4px #fff;
+      animation: scanMove 2s infinite ease-in-out;
+    }
+
+    /* Massive SOS Button */
+    .massive-sos-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 0;
+    }
+    .sos-giant-btn {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      box-shadow: 0 10px 30px rgba(220, 38, 38, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .sos-giant-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* Step Card */
+    .step-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      background: #0f172a;
+      color: white;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      margin-right: 8px;
+    }
+    .step-warning {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: #92400e;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* Bottom Bar Nav */
+    .bottom-bar {
+      margin-top: auto;
+      padding-top: 14px;
+    }
+    .btn-primary {
+      width: 100%;
+      background: #0f172a;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .btn-primary:hover {
+      background: #1e293b;
+    }
+    .btn-danger {
+      background: #dc2626;
+    }
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+    .btn-green {
+      background: #16a34a;
+    }
+    .btn-green:hover {
+      background: #15803d;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      z-index: 200;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* AI Assistant Modal Sheet */
+    .ai-assistant-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0f172a;
+      z-index: 150;
+      display: none;
+      flex-direction: column;
+      border-radius: 40px;
+      overflow-y: auto;
+      padding: 18px 16px;
+      color: white;
+      animation: modalSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ai-assistant-modal.active {
+      display: flex;
+    }
+    @keyframes modalSlideUp {
+      from { transform: translateY(100%); opacity: 0.5; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .ai-laser-beam {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #38bdf8;
+      box-shadow: 0 0 12px #38bdf8, 0 0 24px #0284c7;
+      animation: laserScanAnim 1.4s ease-in-out infinite alternate;
+    }
+    @keyframes laserScanAnim {
+      0% { top: 10%; }
+      100% { top: 90%; }
+    }
+    .faq-accordion {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .faq-accordion.open {
+      border-color: #38bdf8;
+      background: #1e293b;
+    }
+    .faq-accordion-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .faq-accordion-body {
+      display: none;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+      border-top: 1px solid #334155;
+      padding-top: 8px;
+    }
+    .faq-accordion.open .faq-accordion-body {
+      display: block;
+    }
+
+    /* Hands-Free 2-Way Voice Dialogue */
+    .voice-mic-orb {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+      transition: all 0.25s;
+      flex-shrink: 0;
+    }
+    .voice-mic-orb.listening {
+      animation: micPulseListening 1s ease-in-out infinite alternate;
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+    }
+    .voice-mic-orb.speaking {
+      animation: micPulseSpeaking 0.8s ease-in-out infinite alternate;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+    }
+    @keyframes micPulseListening {
+      0% { transform: scale(0.95); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+      100% { transform: scale(1.15); box-shadow: 0 0 25px rgba(239, 68, 68, 1); }
+    }
+    @keyframes micPulseSpeaking {
+      0% { transform: scale(0.95); box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+      100% { transform: scale(1.15); box-shadow: 0 0 25px rgba(34, 197, 94, 1); }
+    }
+    .voice-chip {
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #e2e8f0;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .voice-chip:hover {
+      background: #0284c7;
+      color: white;
+      border-color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="prototype-bar" style="background: rgba(15, 23, 42, 0.9); border-color: rgba(56, 189, 248, 0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.4);">
+    <span class="badge" style="background: #ef4444; color: white; letter-spacing: 0.5px;">HỆ THỐNG CẤP CỨU THỰC TẾ</span>
+    <span style="font-weight: 800; color: #f8fafc;">ResQ-Aid v2.0 • Sơ cứu & Điều phối Y tế 115</span>
+    <button onclick="toggleDemoMode()" id="demoToggleBtn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #38bdf8; font-weight: 700;">Chế độ Demo (0384589660)</button>
+    <button onclick="navTo('screen-home')" style="font-weight: 700;">⌂ Trang chủ</button>
+  </div>
+
+  <!-- Phone Mockup Container -->
+  <div class="phone-chassis">
+    <div class="phone-screen">
+
+      <!-- Dynamic Island -->
+      <div class="dynamic-island">
+        <span style="font-size: 9px; font-weight: 800; color: #10b981;">115 SOS</span>
+        <div class="camera"></div>
+        <span id="liveClock" style="font-size: 10px; font-weight: 700;">13:45</span>
+      </div>
+
+      <div class="screen-container">
+
+        <!-- ==================== SCREEN 1: HOME SCREEN ==================== -->
+        <div id="screen-home" class="screen-view active">
+          <div class="app-bar">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 32px; height: 32px; background: #dc2626; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px;">+</div>
+              <div>
+                <h2>ResQ-Aid v2.0</h2>
+                <div class="sub">Cấp cứu Tiền viện Đa nền tảng</div>
+              </div>
+            </div>
+            <div class="icon-btn" onclick="navTo('screen-consent')" title="Minh bạch dữ liệu">🛡️</div>
+          </div>
+
+          <!-- Hero SOS Button -->
+          <div class="hero-sos-card" onclick="navTo('screen-sos')">
+            <div class="sos-beacon">SOS</div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 4px; font-size: 18px; font-weight: 900; letter-spacing: 0.5px;">
+                SOS KHẨN CẤP 115 ⚡
+              </div>
+              <div style="font-size: 11.5px; opacity: 0.85; margin-top: 2px;">
+                Gửi tọa độ GPS, mở loa ngoài & kích hoạt quy trình sống
+              </div>
+            </div>
+            <div style="font-size: 18px; opacity: 0.7;">›</div>
+          </div>
+
+          <!-- CPR Coach Dark Card -->
+          <div class="cpr-card" onclick="navTo('screen-cpr')">
+            <div class="heart-beacon">❤️</div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 800;">
+                Trợ lý Ép tim CPR <span style="font-size: 11px; color: #38bdf8; font-weight: 900;">110 BPM</span>
+              </div>
+              <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">
+                Bộ gõ nhịp trực quan, đo CCF chuẩn AHA & giọng nói
+              </div>
+            </div>
+            <div style="font-size: 18px; color: #64748b;">›</div>
+          </div>
+
+          <!-- AI Wound Scanner Card -->
+          <div class="cpr-card" style="background: #0f172a; border: 1.5px solid #38bdf8; margin-bottom: 12px;" onclick="navTo('screen-wound-scanner')">
+            <div class="heart-beacon" style="background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8; font-size: 20px;">🔬</div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; color: white;">
+                Quét Vết Thương AI <span style="font-size: 9.5px; background: #0284c7; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 900;">TRIAGE VISION</span>
+              </div>
+              <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">
+                Phân tích vết bỏng độ 1-2-3, vết rách động mạch, gãy hở chi & sơ cứu tức thì
+              </div>
+            </div>
+            <div style="font-size: 18px; color: #38bdf8;">›</div>
+          </div>
+
+          <!-- Bento Grid 10s Actions -->
+          <div class="bento-title">
+            <span>XỬ LÝ NHANH HIỆN TRƯỜNG (10s)</span>
+            <span style="color: #16a34a;">Offline 100%</span>
+          </div>
+          <div class="bento-grid">
+            <div class="bento-item bento-choking" onclick="openProtocol('PROTO_CHOKING')">
+              <span style="font-size: 20px;">🗣️</span>
+              <div>
+                <div style="font-size: 12.5px; font-weight: 800;">Hóc dị vật</div>
+                <div style="font-size: 10px; color: #b45309; font-weight: 700;">Heimlich 5 vỗ 5 ép</div>
+              </div>
+            </div>
+            <div class="bento-item bento-drowning" onclick="openProtocol('PROTO_DROWNING')">
+              <span style="font-size: 20px;">🌊</span>
+              <div>
+                <div style="font-size: 12.5px; font-weight: 800;">Đuối nước</div>
+                <div style="font-size: 10px; color: #0284c7; font-weight: 700;">5 thổi ngạt đầu tiên</div>
+              </div>
+            </div>
+            <div class="bento-item bento-electric" onclick="openProtocol('PROTO_ELECTROCUTION')">
+              <span style="font-size: 20px;">⚡</span>
+              <div>
+                <div style="font-size: 12.5px; font-weight: 800;">Điện giật</div>
+                <div style="font-size: 10px; color: #b45309; font-weight: 700;">Tách nguồn an toàn</div>
+              </div>
+            </div>
+            <div class="bento-item bento-burns" onclick="openProtocol('PROTO_BURNS')">
+              <span style="font-size: 20px;">🔥</span>
+              <div>
+                <div style="font-size: 12.5px; font-weight: 800;">Bỏng & Dị ứng</div>
+                <div style="font-size: 10px; color: #e11d48; font-weight: 700;">Xả mát & Chống sốc</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Handbook Full Link -->
+          <div class="info-card" onclick="navTo('screen-handbook')">
+            <div style="width: 40px; height: 40px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">📖</div>
+            <div style="flex: 1;">
+              <div style="font-size: 14.5px; font-weight: 800; color: #0f172a;">Cẩm nang Sơ cứu Toàn diện</div>
+              <div style="font-size: 11.5px; color: #64748b;">8 phác đồ chuẩn Y khoa AHA & Bộ Y tế: Đột quỵ FAST, Sốc phản vệ...</div>
+            </div>
+            <div style="font-size: 16px; color: #94a3b8;">›</div>
+          </div>
+        </div>
+
+        <!-- ==================== SCREEN 2: EMERGENCY SOS SCREEN ==================== -->
+        <div id="screen-sos" class="screen-view">
+          <div class="app-bar">
+            <div class="icon-btn" onclick="navTo('screen-home')">←</div>
+            <h2>KÍCH HOẠT SOS KHẨN CẤP</h2>
+            <div class="icon-btn" onclick="toggleDemoMode()" id="sosDemoBadge" style="font-size: 11px; font-weight: 800; color: #16a34a;">DEMO</div>
+          </div>
+
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 0.5px;">ĐÁNH GIÁ NHANH HIỆN TRƯỜNG (TRIAGE 10s)</div>
+            <div class="chip-wrap">
+              <div class="chip active" onclick="selectTriage(this, 'CARDIAC_ARREST')">❤️ Ngừng tim / Bất tỉnh</div>
+              <div class="chip" onclick="selectTriage(this, 'CHOKING')">🗣️ Hóc dị vật / Nghẹn</div>
+              <div class="chip" onclick="selectTriage(this, 'DROWNING')">🌊 Đuối nước</div>
+              <div class="chip" onclick="selectTriage(this, 'ELECTROCUTION')">⚡ Điện giật</div>
+              <div class="chip" onclick="selectTriage(this, 'BURNS')">🔥 Bỏng nặng</div>
+              <div class="chip" onclick="selectTriage(this, 'TRAUMA')">🩹 Chấn thương gãy xương</div>
+            </div>
+          </div>
+
+          <!-- Pulsing SOS Button -->
+          <div class="massive-sos-box">
+            <div class="sos-giant-btn" onclick="triggerSosAction()">
+              <div style="font-size: 40px; margin-bottom: 2px;">🆘</div>
+              <div style="font-size: 18px; font-weight: 900; letter-spacing: 2px;">BẤM SOS</div>
+            </div>
+            <div style="font-size: 12px; color: #64748b; font-weight: 600; text-align: center; margin-top: 16px;">
+              Chạm nút đỏ để gửi tọa độ GPS, mở loa ngoài & gọi cấp cứu 115
+            </div>
+          </div>
+
+          <!-- Direct CPR Shortcut -->
+          <button class="btn-primary" style="margin-bottom: 12px;" onclick="navTo('screen-cpr')">
+            ❤️ MỞ NGAY TRỢ LÝ ÉP TIM CPR 110 BPM
+          </button>
+
+          <!-- Emergency Connection Status Card -->
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px; font-size: 11.5px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <div style="font-weight: 800; color: #0f172a;">📡 TRẠNG THÁI KẾT NỐI TỔNG ĐÀI CẤP CỨU</div>
+              <span style="background: #dcfce7; color: #15803d; font-size: 9.5px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">SẴN SÀNG</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 2px 0; color: #64748b;">
+              <span>Định vị GPS Hiện trường:</span>
+              <strong style="color: #0f172a;">16.0544° N, 108.2022° E (±3m)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 2px 0; color: #64748b;">
+              <span>Đường dây nóng kết nối:</span>
+              <strong style="color: #0f172a;">115 (Demo: 0384589660)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 2px 0; color: #64748b;">
+              <span>Thời gian phản hồi kích hoạt:</span>
+              <strong style="color: #15803d;">Tức thời (< 1 giây)</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== SCREEN 3: CPR COACH AMOLED ==================== -->
+        <div id="screen-cpr" class="screen-view screen-cpr">
+          <div class="app-bar" style="border: none;">
+            <div class="icon-btn" style="background: #131d31; border-color: #24324d; color: white;" onclick="navTo('screen-home')">←</div>
+            <h2 style="color: white; font-size: 15px;">TRỢ LÝ ÉP TIM CPR 110 BPM</h2>
+            <div class="icon-btn" style="background: #131d31; border-color: #24324d;" onclick="toggleAudio()" id="cprAudioBtn">🔊</div>
+          </div>
+
+          <!-- CCF & Timer HUD -->
+          <div class="cpr-hud-box">
+            <div style="flex: 1;">
+              <div style="font-size: 10px; font-weight: 800; color: #94a3b8;">THỜI GIAN HỒI SỨC</div>
+              <div style="font-size: 22px; font-weight: 900; font-family: monospace; color: white; margin-top: 2px;" id="cprTime">00:00</div>
+            </div>
+            <div style="width: 1px; background: #24324d; margin: 0 12px;"></div>
+            <div style="flex: 1.2;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 10px; font-weight: 800; color: #94a3b8;">CHỈ SỐ CCF</span>
+                <span style="background: rgba(16, 185, 129, 0.2); color: #4ade80; font-size: 9px; font-weight: 800; padding: 1px 6px; border-radius: 4px;">ĐẠT</span>
+              </div>
+              <div style="font-size: 18px; font-weight: 900; color: #4ade80; margin-top: 2px;" id="cprCcf">100% (Chuẩn ≥60%)</div>
+            </div>
+          </div>
+
+          <!-- Pulsing Metronome Center -->
+          <div class="cpr-metronome-area">
+            <div class="cpr-pulse-ring" id="cprDisc" onclick="toggleCpr()">
+              <div style="font-size: 58px; font-weight: 900; line-height: 1;" id="cprCount">1</div>
+              <div style="font-size: 13px; font-weight: 700; opacity: 0.8;">/ 30 NHỊP</div>
+            </div>
+
+            <!-- Standard Banner -->
+            <div style="background: #131d31; border: 1px solid #24324d; border-radius: 12px; padding: 10px 14px; margin-top: 14px; width: 100%; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="font-size: 12px; font-weight: 800; color: white;">NHỊP ĐỘ CHUẨN: 110 LẦN/PHÚT</div>
+                <div style="font-size: 11px; color: #94a3b8;">Ép sâu 5 - 6 cm giữa ngực. Để ngực nở hoàn toàn.</div>
+              </div>
+              <div style="background: rgba(220, 38, 38, 0.25); color: #fca5a5; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 800;" id="cprCycleBadge">Chu kỳ: 0</div>
+            </div>
+
+            <!-- Hands-Free 2-Way Voice Dialogue Bar in CPR -->
+            <div style="background: #1e293b; border: 1px solid #0284c7; border-radius: 14px; padding: 10px 12px; margin-top: 10px; width: 100%; box-sizing: border-box;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div class="voice-mic-orb" id="cprVoiceOrb" onclick="toggleWebVoiceDialogue('cpr')">
+                    🎙️
+                  </div>
+                  <div>
+                    <div style="font-size: 11px; font-weight: 800; color: #38bdf8;" id="cprVoiceStatus">ĐỐI THOẠI RẢNH TAY 2 CHIỀU</div>
+                    <div style="font-size: 10px; color: #94a3b8;" id="cprVoiceSub">Chạm mic hoặc nói to trực tiếp không cần gõ</div>
+                  </div>
+                </div>
+                <button onclick="toggleWebVoiceDialogue('cpr')" style="background: #0284c7; color: white; border: none; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;" id="cprVoiceBtn">MỞ MIC</button>
+              </div>
+              <!-- Quick Chips for CPR -->
+              <div style="display: flex; gap: 6px; overflow-x: auto; margin-top: 8px; padding-bottom: 2px;">
+                <button class="voice-chip" onclick="simulateVoiceQuery('Nạn nhân có mạch lại rồi', 'cpr')">Nạn nhân có mạch lại rồi</button>
+                <button class="voice-chip" onclick="simulateVoiceQuery('Mỏi tay quá xử lý sao', 'cpr')">Mỏi tay quá</button>
+                <button class="voice-chip" onclick="simulateVoiceQuery('Tư thế tay đã đúng chưa', 'cpr')">Tư thế đúng chưa?</button>
+                <button class="voice-chip" onclick="simulateVoiceQuery('Đã có máy AED rồi', 'cpr')">Đã có AED</button>
+              </div>
+              <!-- Dialogue Stream -->
+              <div id="cprVoiceTranscriptBox" style="display: none; margin-top: 8px; background: #0f172a; border-radius: 8px; padding: 8px; font-size: 11.5px; border: 1px solid #334155;">
+                <div style="color: #38bdf8; font-style: italic;" id="cprUserTranscript"></div>
+                <div style="color: #4ade80; margin-top: 4px; font-weight: 600;" id="cprAiTranscript"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CPR Action Controls -->
+          <div class="cpr-controls">
+            <button class="btn-primary" style="flex: 1;" id="cprPlayBtn" onclick="toggleCpr()">
+              ⏸ TẠM DỪNG
+            </button>
+            <button class="icon-btn" style="width: 48px; height: 48px; background: #131d31; border-color: #24324d; color: white;" onclick="resetCpr()">
+              🔄
+            </button>
+            <button class="icon-btn" style="width: 48px; height: 48px; background: #16a34a; border-color: #16a34a; color: white;" onclick="fakeCall115()">
+              📞
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== SCREEN 4: HANDBOOK LIST ==================== -->
+        <div id="screen-handbook" class="screen-view">
+          <div class="app-bar">
+            <div class="icon-btn" onclick="navTo('screen-home')">←</div>
+            <h2>Cẩm nang Sơ cứu Offline</h2>
+            <div style="width: 36px;"></div>
+          </div>
+
+          <!-- Search Input -->
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <span>🔍</span>
+            <input type="text" id="handbookSearch" placeholder="Tìm kiếm phác đồ (CPR, đuối nước, bỏng...)" style="border: none; outline: none; width: 100%; font-size: 13px;" oninput="filterProtocols()">
+          </div>
+
+          <!-- Category Chips -->
+          <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 6px;">
+            <div class="chip active" onclick="filterCategory(this, 'ALL')">Tất cả (8)</div>
+            <div class="chip" onclick="filterCategory(this, 'CARDIO')">Tim mạch & Hô hấp</div>
+            <div class="chip" onclick="filterCategory(this, 'ACCIDENT')">Tai nạn & Gãy xương</div>
+            <div class="chip" onclick="filterCategory(this, 'ALLERGY')">Dị ứng & Bỏng</div>
+          </div>
+
+          <!-- Performance Banner -->
+          <div style="background: #eff6ff; border-radius: 10px; padding: 6px 10px; font-size: 11px; color: #0369a1; font-weight: 600; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span>⚡ SQLite Bộ nhớ: 12ms (≤ 300ms)</span>
+            <strong style="background: #dcfce7; color: #15803d; padding: 1px 6px; border-radius: 4px;">ĐẠT CHUẨN</strong>
+          </div>
+
+          <!-- Protocol List -->
+          <div id="protocolList">
+            <!-- Dynamic Protocol Cards Injected by JS -->
+          </div>
+        </div>
+
+        <!-- ==================== SCREEN 5: PROTOCOL DETAIL ==================== -->
+        <div id="screen-detail" class="screen-view">
+          <div class="app-bar">
+            <div class="icon-btn" onclick="navTo('screen-handbook')">←</div>
+            <h2 id="detailTitle" style="font-size: 14px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Chi tiết phác đồ</h2>
+            <div style="display: flex; gap: 6px;">
+              <div class="icon-btn" onclick="openAiModal()" title="Trợ lý AI Khám Hiện trường" style="color: #38bdf8; background: rgba(56, 189, 248, 0.15);">🤖</div>
+              <div class="icon-btn" onclick="speakDetail()" title="Đọc giọng nói">🔊</div>
+            </div>
+          </div>
+
+          <!-- Target Card -->
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px; margin-bottom: 10px; display: flex; gap: 10px;">
+            <div style="font-size: 24px;">🛡️</div>
+            <div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="background: #dcfce7; color: #15803d; font-size: 10.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px;" id="detailTarget">Đối tượng: Mọi lứa tuổi</span>
+                <span style="font-size: 10.5px; color: #1d4ed8; font-weight: 700; background: #eff6ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #bfdbfe;">Chuẩn AHA ✓</span>
+              </div>
+              <div style="font-size: 12px; color: #334155; margin-top: 4px; line-height: 1.35;" id="detailSummary">
+                Tóm tắt phác đồ...
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero AI Assistant Card -->
+          <div style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 1.5px solid #38bdf8; border-radius: 16px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);" onclick="openAiModal()">
+            <div style="background: rgba(2, 132, 199, 0.25); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🤖</div>
+            <div style="flex: 1;">
+              <div style="font-size: 13px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 4px;">
+                TRỢ LÝ AI KHÁM HIỆN TRƯỜNG ✨
+              </div>
+              <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
+                Quét camera vết thương • Hỏi cơ chế "Vì sao & Xử trí" • Giọng nói
+              </div>
+            </div>
+            <span style="color: #38bdf8; font-size: 18px; font-weight: 800;">›</span>
+          </div>
+
+          <!-- CPR Warning Banner -->
+          <div style="background: linear-gradient(135deg, #dc2626, #991b1b); color: white; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 14px;" onclick="navTo('screen-cpr')">
+            <span>❤️</span>
+            <span style="flex: 1;">NẠN NHÂN BẤT TỈNH & NGỪNG THỞ? -> ÉP TIM NGAY</span>
+            <span>›</span>
+          </div>
+
+          <!-- Steps Container -->
+          <div style="font-size: 12px; font-weight: 800; color: #475569; margin-bottom: 8px;">CÁC BƯỚC XỬ TRÍ TUẦN TỰ (CHUẨN BỘ Y TẾ):</div>
+          <div id="detailSteps">
+            <!-- Dynamic Steps Injected by JS -->
+          </div>
+
+          <!-- Contraindications -->
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 16px; padding: 12px; margin-top: 10px; margin-bottom: 14px;" id="detailContraBox">
+            <div style="color: #991b1b; font-size: 12px; font-weight: 800; margin-bottom: 6px;">⛔ CẢNH BÁO NGUY HIỂM — TUYỆT ĐỐI TRÁNH:</div>
+            <ul id="detailContraList" style="padding-left: 18px; font-size: 12px; color: #7f1d1d; line-height: 1.4;"></ul>
+          </div>
+
+          <button class="btn-primary btn-green" onclick="fakeCall115()">
+            📞 GỌI ĐIỆN THOẠI 115 TRỢ GIÚP
+          </button>
+
+          <!-- Floating AI Action Button -->
+          <div style="position: sticky; bottom: 8px; display: flex; justify-content: flex-end; z-index: 20; pointer-events: none; margin-top: 12px;">
+            <button onclick="openAiModal()" style="pointer-events: auto; background: #0284c7; color: white; border: none; padding: 10px 16px; border-radius: 24px; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4); cursor: pointer;">
+              <span>🤖</span> TRỢ LÝ AI HIỆN TRƯỜNG
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== SCREEN 6: CONSENT SCREEN ==================== -->
+        <div id="screen-consent" class="screen-view">
+          <div class="app-bar">
+            <div class="icon-btn" onclick="navTo('screen-home')">←</div>
+            <h2>Minh bạch & Quyền riêng tư</h2>
+            <div style="width: 36px;"></div>
+          </div>
+
+          <!-- Decree 13 Header -->
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; display: flex; gap: 12px; margin-bottom: 14px;">
+            <div style="font-size: 32px;">🛡️</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 800; color: #0f172a;">Tuân thủ Nghị định 13/2023/NĐ-CP</div>
+              <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; line-height: 1.35;">
+                Cam kết bảo vệ dữ liệu cá nhân & dữ liệu y tế của người dân Việt Nam.
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size: 11.5px; font-weight: 800; color: #475569; margin-bottom: 8px;">4 NGUYÊN TẮC MINH BẠCH DỮ LIỆU:</div>
+
+          <div class="step-card">
+            <div style="font-size: 13px; font-weight: 700; color: #0f172a;">📍 1. Tọa độ GPS Phần cứng</div>
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; line-height: 1.35;">
+              Chỉ gửi tọa độ khi bấm nút SOS để kíp trực 115 tìm thấy bạn. Không theo dõi hành trình người dùng khi không cấp cứu.
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div style="font-size: 13px; font-weight: 700; color: #0f172a;">📷 2. Camera AI MoveNet</div>
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; line-height: 1.35;">
+              Xử lý 100% trong bộ nhớ RAM máy (On-device). Tuyệt đối không quay phim, không lưu ảnh ra ổ cứng và không gửi ảnh lên đám mây.
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div style="font-size: 13px; font-weight: 700; color: #0f172a;">🎙️ 3. Giọng nói Khẩu lệnh Offline</div>
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; line-height: 1.35;">
+              Nhận diện giọng nói cục bộ (Vosk engine). Không ghi âm, không truyền tải âm thanh ra ngoài mạng.
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div style="font-size: 13px; font-weight: 700; color: #0f172a;">📊 4. Chỉ số Ép tim Ẩn danh</div>
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; line-height: 1.35;">
+              Tần số ép tim (BPM) và chỉ số CCF được lưu ẩn danh với mã UUID tạm thời nhằm hỗ trợ bác sĩ đánh giá chất lượng sơ cứu.
+            </div>
+          </div>
+
+          <!-- Purge Button -->
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 16px; padding: 14px; margin-top: 8px;">
+            <div style="font-size: 12.5px; font-weight: 800; color: #991b1b;">Quyền Yêu cầu Xóa Dữ liệu (Right to be Forgotten)</div>
+            <div style="font-size: 11.5px; color: #7f1d1d; margin: 4px 0 10px 0;">
+              Bạn có quyền xóa sạch toàn bộ lịch sử ca cấp cứu và nhật ký lưu trữ trên thiết bị này bất kỳ lúc nào.
+            </div>
+            <button class="btn-primary btn-danger" onclick="purgeData()">
+              🗑️ XÓA TOÀN BỘ DỮ LIỆU ĐÃ LƯU
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== SCREEN 6: WOUND & BURNS SCANNER SCREEN ==================== -->
+        <div id="screen-wound-scanner" class="screen-view">
+          <div class="top-nav">
+            <button class="back-btn" onclick="navTo('screen-home')">←</button>
+            <div class="nav-title">QUÉT VẾT THƯƠNG AI & PHÂN LOẠI</div>
+            <div class="icon-btn" onclick="fakeCall115()" title="Gọi cấp cứu" style="color: #ef4444;">📞</div>
+          </div>
+
+          <!-- Quick Case Selectors -->
+          <div style="font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 6px;">CHỌN CA TAI NẠN LÂM SÀNG CẦN QUÉT:</div>
+          <div class="chip-wrap" style="margin-top: 0; margin-bottom: 12px;">
+            <div class="chip active" id="chip-burn2" onclick="selectWoundCase('burnDegree2')">🔥 Bỏng Nước Sôi (Độ 2)</div>
+            <div class="chip" id="chip-burn3" onclick="selectWoundCase('burnDegree3')">⚠️ Bỏng Lửa/Điện (Độ 3)</div>
+            <div class="chip" id="chip-bleed" onclick="selectWoundCase('arterialBleeding')">🩸 Chảy Máu Động Mạch</div>
+            <div class="chip" id="chip-fracture" onclick="selectWoundCase('openFracture')">🦴 Gãy Xương Chi</div>
+            <div class="chip" id="chip-abrasion" onclick="selectWoundCase('minorAbrasion')">🩹 Xước & Va Đập Nhẹ</div>
+          </div>
+
+          <!-- Camera AI Viewport -->
+          <div style="position: relative; height: 220px; background: #0f172a; border-radius: 18px; border: 2px solid #f59e0b; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);" id="scannerViewport">
+            <!-- Reticle Corners -->
+            <div style="position: absolute; top: 12px; left: 12px; width: 20px; height: 20px; border-top: 3px solid #f59e0b; border-left: 3px solid #f59e0b;" id="reticleTL"></div>
+            <div style="position: absolute; top: 12px; right: 12px; width: 20px; height: 20px; border-top: 3px solid #f59e0b; border-right: 3px solid #f59e0b;" id="reticleTR"></div>
+            <div style="position: absolute; bottom: 12px; left: 12px; width: 20px; height: 20px; border-bottom: 3px solid #f59e0b; border-left: 3px solid #f59e0b;" id="reticleBL"></div>
+            <div style="position: absolute; bottom: 12px; right: 12px; width: 20px; height: 20px; border-bottom: 3px solid #f59e0b; border-right: 3px solid #f59e0b;" id="reticleBR"></div>
+
+            <!-- Laser Scanning Beam -->
+            <div class="scanner-laser" id="scannerLaser"></div>
+
+            <!-- Icon & Symptom Graphic -->
+            <div style="font-size: 60px; margin-bottom: 6px;" id="scannerIcon">🔥</div>
+            <div style="color: white; font-size: 15px; font-weight: 800;" id="scannerTitle">Vết Bỏng Nước Sôi / Bỏng Nhiệt (Độ 2)</div>
+            <div style="color: #94a3b8; font-size: 11.5px; margin-top: 2px; text-align: center; padding: 0 20px;" id="scannerSub">Da ửng đỏ, bọng nước phồng chứa dịch trong, đau rát dữ dội</div>
+
+            <!-- Status Pill -->
+            <div style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 3px 8px; font-size: 10px; color: #4ade80; font-weight: 800; display: flex; align-items: center; gap: 4px;">
+              <span style="width: 6px; height: 6px; background: #4ade80; border-radius: 50%;"></span> THỊ GIÁC AI SẴN SÀNG
+            </div>
+
+            <!-- Rescan Button -->
+            <button style="position: absolute; bottom: 10px; right: 10px; background: #2563eb; color: white; border: none; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;" onclick="triggerRescan()">
+              🔄 QUÉT LẠI
+            </button>
+          </div>
+
+          <!-- Triage Diagnosis Card -->
+          <div style="margin-top: 14px; background: #1e293b; border: 1.5px solid #f59e0b; border-radius: 16px; padding: 14px; color: white;" id="triageDiagCard">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="background: #f59e0b; color: white; font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 6px;" id="triageBadge">P1 • CẦN XỬ TRÍ Y TẾ</span>
+              <span style="color: #4ade80; font-size: 11.5px; font-weight: 700;">Độ tin cậy AI: 97.4%</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 800; margin-top: 8px;" id="triageTitle">Bỏng biểu bì sâu / Trung bì độ 2 (Diện tích ~8-12%)</div>
+            <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px; line-height: 1.4;" id="triageDesc">
+              Tổn thương lớp thượng bì và một phần trung bì. Nguy cơ nhiễm trùng và sốc đau nếu không hạ nhiệt đúng cách.
+            </div>
+          </div>
+
+          <!-- Medical Guidance Checklist -->
+          <div style="margin-top: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px;">
+            <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              <span>📋</span> QUY TRÌNH SƠ CỨU CHUẨN Y TẾ
+            </div>
+            <div id="triageStepsList">
+              <div class="step-card">
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;"><span class="step-num">1</span>Hạ nhiệt ngay bằng nước mát 15-20 phút</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">Để vết bỏng dưới vòi nước sạch chảy nhẹ nhiệt độ phòng (15-20°C) tối thiểu 15-20 phút để ngăn nhiệt lan sâu vào mô.</div>
+              </div>
+              <div class="step-card">
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;"><span class="step-num">2</span>Cởi bỏ trang sức & cắt quần áo nhẹ nhàng</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">Tháo nhẫn, đồng hồ trước khi chi sưng phù. Cắt vải xung quanh, KHÔNG cố giật nếu vải dính chặt vào da.</div>
+              </div>
+              <div class="step-card">
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;"><span class="step-num">3</span>Bảo vệ bọng nước & băng gạc vô trùng ẩm</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">Phủ gạc ẩm hoặc màng bọc thực phẩm sạch. TUYỆT ĐỐI KHÔNG chọc vỡ bọng nước (màng chống nhiễm khuẩn tự nhiên).</div>
+              </div>
+              <div class="step-card">
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;"><span class="step-num">4</span>Ủ ấm chống sốc & gọi 115 chuyển viện</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">Đắp chăn mỏng giữ ấm các vùng không bị bỏng. Cho uống từng ngụm nước ấm nếu tỉnh táo. Chuyển cấp cứu.</div>
+              </div>
+            </div>
+
+            <!-- Danger Warning Box -->
+            <div style="background: #fef2f2; border: 1.5px solid #ef4444; border-radius: 12px; padding: 12px; margin-top: 8px; color: #991b1b; font-size: 12px; font-weight: 700; line-height: 1.4;" id="dangerWarningBox">
+              ⚠️ CẢNH BÁO NGUY HIỂM: CẤM bôi kem đánh răng, nước mắm, mỡ trăn, cồn lên vết bỏng. CẤM dùng đá lạnh chườm trực tiếp hoặc chọc vỡ các bọng nước!
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div style="display: flex; gap: 8px; margin-top: 14px; margin-bottom: 24px;">
+            <button class="btn-primary btn-danger" style="flex: 6; font-size: 12.5px;" onclick="fakeCall115()">
+              📞 GỌI CỨU THƯƠNG (0384589660)
+            </button>
+            <button class="btn-primary" style="flex: 4; background: #0284c7; font-size: 12px;" onclick="saveWoundToOutbox()">
+              💾 LƯU OUTBOX
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==================== MODAL: AI FIRST-AID ASSISTANT ==================== -->
+      <div id="aiAssistantModal" class="ai-assistant-modal">
+        <!-- Modal Top Bar -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="background: rgba(2, 132, 199, 0.25); border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🤖</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: white;" id="aiModalProtocolTitle">TRỢ LÝ AI HIỆN TRƯỜNG</div>
+              <div style="font-size: 10px; color: #4ade80; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                <span style="width: 6px; height: 6px; background: #4ade80; border-radius: 50%;"></span>
+                Thị giác On-Device • Ngoại tuyến 100%
+              </div>
+            </div>
+          </div>
+          <button onclick="closeAiModal()" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+        </div>
+
+        <!-- Segmented Tab Switcher -->
+        <div style="display: flex; background: #1e293b; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 14px;">
+          <button id="aiTabBtn0" onclick="switchAiTab(0)" style="flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 11.5px; font-weight: 800; cursor: pointer; background: #0284c7; color: white;">📷 Quét Thị Giác AI</button>
+          <button id="aiTabBtn1" onclick="switchAiTab(1)" style="flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 11.5px; font-weight: 800; cursor: pointer; background: transparent; color: #94a3b8;">🎙️ Đối Thoại Giọng Nói 2 Chiều</button>
+        </div>
+
+        <!-- TAB 0: VISION SCANNER -->
+        <div id="aiTabContent0">
+          <!-- Viewfinder Frame -->
+          <div style="position: relative; height: 210px; background: #020617; border-radius: 16px; border: 1.5px solid #334155; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;" id="aiModalViewport">
+            <!-- Reticle Corners -->
+            <div style="position: absolute; top: 10px; left: 10px; width: 18px; height: 18px; border-top: 3px solid #38bdf8; border-left: 3px solid #38bdf8;"></div>
+            <div style="position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-top: 3px solid #38bdf8; border-right: 3px solid #38bdf8;"></div>
+            <div style="position: absolute; bottom: 10px; left: 10px; width: 18px; height: 18px; border-bottom: 3px solid #38bdf8; border-left: 3px solid #38bdf8;"></div>
+            <div style="position: absolute; bottom: 10px; right: 10px; width: 18px; height: 18px; border-bottom: 3px solid #38bdf8; border-right: 3px solid #38bdf8;"></div>
+
+            <!-- Laser Line -->
+            <div id="aiLaserLine" class="ai-laser-beam" style="display: none;"></div>
+
+            <!-- Icon & Guidance -->
+            <div style="font-size: 54px; margin-bottom: 6px;" id="aiModalIcon">⚡</div>
+            <div style="color: white; font-size: 13.5px; font-weight: 800; text-align: center;" id="aiModalGuideText">HƯỚNG CAMERA VỀ NẠN NHÂN / VẾT THƯƠNG</div>
+            <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">Khoảng cách tối ưu: 20 - 30 cm</div>
+
+            <!-- Viewfinder Badge -->
+            <div style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 2px 7px; font-size: 9.5px; color: #4ade80; font-weight: 800; display: flex; align-items: center; gap: 4px;" id="aiModalStatusPill">
+              <span style="width: 5px; height: 5px; background: #4ade80; border-radius: 50%;"></span>
+              AI VISION SẴN SÀNG
+            </div>
+          </div>
+
+          <!-- Scan Action Button -->
+          <button id="aiScanBtn" onclick="startAiScan()" style="width: 100%; margin-top: 12px; background: #0284c7; color: white; border: none; padding: 13px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>📸</span> BẮT ĐẦU QUÉT AI (GIỮ YÊN 2 GIÂY)
+          </button>
+
+          <!-- Voice Dialogue Shortcut during Scanning -->
+          <button onclick="switchAiTab(1)" style="width: 100%; margin-top: 8px; background: transparent; border: 1.5px solid #38bdf8; color: #38bdf8; padding: 10px; border-radius: 12px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>🎙️</span> VỪA QUAY VỪA ĐỐI THOẠI VỚI BÁC SĨ AI (RẢNH TAY)
+          </button>
+
+          <!-- Diagnosis Result Card -->
+          <div style="margin-top: 14px; background: #1e293b; border: 1.5px solid #38bdf8; border-radius: 16px; padding: 14px;" id="aiDiagCard">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="background: #f59e0b; color: white; font-size: 10.5px; font-weight: 900; padding: 2px 7px; border-radius: 6px;" id="aiDiagUrgency">P1 • CẦN XỬ TRÍ Y TẾ KHẨN</span>
+              <button onclick="speakAiDiag()" style="background: transparent; border: none; color: #38bdf8; font-size: 18px; cursor: pointer;" title="Đọc chẩn đoán">🔊</button>
+            </div>
+            <div style="font-size: 15px; font-weight: 800; margin-top: 8px; color: white;" id="aiDiagTitle">Chẩn đoán tổn thương...</div>
+            
+            <!-- On-Device TensorFlow Lite Banner -->
+            <div style="background: #0f172a; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 10px; padding: 10px; margin: 10px 0 12px 0;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 900; color: #f59e0b; letter-spacing: 0.3px;">
+                  <span>⚙️</span> MÔ HÌNH AI ON-DEVICE (TENSORFLOW LITE)
+                </div>
+                <span style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-size: 9.5px; font-weight: 900; padding: 1.5px 6px; border-radius: 4px;" id="aiTfliteConf">CONF: 98.2%</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
+                <span style="color: #e2e8f0; font-weight: 600;" id="aiTfliteModel">MobileNetV2-Quantized-Trauma (3.45 MB)</span>
+                <span style="color: #38bdf8; font-weight: 800;" id="aiTfliteLatency">Độ trễ: 14ms</span>
+              </div>
+              <div style="font-size: 9.5px; color: #94a3b8;" id="aiTfliteRuntime">TensorFlow Lite C++ Runtime (NPU / XNNPACK)</div>
+            </div>
+
+            <div style="height: 1px; background: #334155; margin: 10px 0;"></div>
+
+            <!-- Mechanism: Vì sao bị & cơ chế -->
+            <div style="font-size: 11px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+              <span>❓</span> VÌ SAO BỊ & CƠ CHẾ NGUY HIỂM:
+            </div>
+            <div style="font-size: 12px; color: #e2e8f0; line-height: 1.45; margin-bottom: 12px;" id="aiDiagWhy">
+              Cơ chế y khoa...
+            </div>
+
+            <!-- Emergency Actions -->
+            <div style="font-size: 11px; font-weight: 800; color: #4ade80; display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+              <span>▶</span> HÀNH ĐỘNG KHẨN CẤP CẦN LÀM NGAY:
+            </div>
+            <div style="font-size: 12px; color: #e2e8f0; line-height: 1.45; margin-bottom: 12px; white-space: pre-line;" id="aiDiagAction">
+              Các bước hành động...
+            </div>
+
+            <!-- Contraindications -->
+            <div style="background: #450a0a; border: 1px solid #dc2626; border-radius: 10px; padding: 10px; font-size: 11.5px; color: #fecaca; line-height: 1.4;" id="aiDiagContra">
+              ⛔ Cảnh báo tối kỵ...
+            </div>
+
+            <!-- CPR Shortcut -->
+            <div id="aiCprShortcut" style="display: none; margin-top: 10px;">
+              <button onclick="closeAiModal(); navTo('screen-cpr');" style="width: 100%; background: #dc2626; color: white; border: none; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>❤️</span> NẠN NHÂN NGỪNG TIM? BẬT CPR 110 BPM NGAY
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1: 2-WAY HANDS-FREE VOICE DIALOGUE & MEDICAL FAQ -->
+        <div id="aiTabContent1" style="display: none;">
+          <!-- 2-Way Voice Dialogue Console -->
+          <div style="background: #1e293b; border: 1.5px solid #0284c7; border-radius: 16px; padding: 14px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="width: 8px; height: 8px; background: #38bdf8; border-radius: 50%;" id="aiVoiceDot"></span>
+                <span style="font-size: 11px; font-weight: 900; color: #38bdf8; letter-spacing: 0.3px;" id="aiVoiceHeaderStatus">ĐỐI THOẠI 2 CHIỀU RẢNH TAY (VOICE AI)</span>
+              </div>
+              <span style="font-size: 10px; color: #94a3b8; background: #0f172a; padding: 2px 6px; border-radius: 4px;">Nói trực tiếp • Không cần gõ</span>
+            </div>
+
+            <!-- Big Pulsing Mic Button & Status -->
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+              <div class="voice-mic-orb" id="modalVoiceOrb" onclick="toggleWebVoiceDialogue('modal')">
+                🎙️
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 12.5px; font-weight: bold; color: white;" id="modalVoiceTitle">Chạm mic để nói chuyện trực tiếp</div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;" id="modalVoiceSub">Hệ thống tự động nghe và phát âm thanh trả lời</div>
+              </div>
+            </div>
+
+            <!-- Suggested Spoken Prompts -->
+            <div style="font-size: 10px; font-weight: bold; color: #fbbf24; margin-bottom: 6px;">CÂU HỎI MẪU (NÓI TO HOẶC CHẠM NHANH):</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="aiVoicePromptChips">
+              <button class="voice-chip" onclick="simulateVoiceQuery('Có được chườm đá lạnh không', 'modal')">Có được chườm đá lạnh không?</button>
+              <button class="voice-chip" onclick="simulateVoiceQuery('Bôi kem đánh răng được không', 'modal')">Bôi kem đánh răng được không?</button>
+              <button class="voice-chip" onclick="simulateVoiceQuery('Bọng nước có được chọc vỡ không', 'modal')">Bọng nước có chọc vỡ không?</button>
+              <button class="voice-chip" onclick="simulateVoiceQuery('Vết thương sau giật điện có điểm ra ở đâu', 'modal')">Vết thương sau giật điện</button>
+              <button class="voice-chip" onclick="simulateVoiceQuery('Nạn nhân có mạch lại rồi làm gì', 'modal')">Nạn nhân có mạch lại rồi</button>
+              <button class="voice-chip" onclick="simulateVoiceQuery('Mỏi tay quá xử lý sao', 'modal')">Mỏi tay quá</button>
+              <button class="voice-chip" onclick="simulateVoiceQuery('Tư thế tay đã đúng chưa', 'modal')">Tư thế tay đã đúng chưa?</button>
+            </div>
+
+            <!-- Dialogue Stream Area -->
+            <div id="modalVoiceTranscriptBox" style="display: none; margin-top: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 12px;">
+              <div style="font-size: 12px; color: #38bdf8; font-weight: 700;" id="modalUserTranscript"></div>
+              <div style="font-size: 12.5px; color: white; margin-top: 6px; line-height: 1.45; border-top: 1px solid #1e293b; padding-top: 6px;" id="modalAiTranscript"></div>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; font-weight: 800; color: #94a3b8; margin-bottom: 8px;">HOẶC TRA CỨU CÂU HỎI THƯỜNG GẶP CÓ SẴN:</div>
+          <div id="aiFaqContainer">
+            <!-- Dynamic FAQ Items -->
+          </div>
+
+          <!-- Optional Secondary Free-text Input Box (Dự phòng phòng ồn) -->
+          <div style="margin-top: 14px; background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 6px;">
+              GÕ THẮC MẮC (KHI PHÒNG QUÁ ỒN KHÔNG NÓI ĐƯỢC):
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <input type="text" id="aiCustomQueryInput" placeholder="VD: Có nên chườm đá? Nạn nhân tỉnh lại..." style="flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 12px; color: white; font-size: 12px; outline: none;">
+              <button onclick="askAiQuestion()" style="background: #0284c7; color: white; border: none; border-radius: 8px; padding: 0 14px; font-size: 12px; font-weight: 800; cursor: pointer;">Gửi</button>
+            </div>
+            <div id="aiCustomAnswerBox" style="display: none; margin-top: 10px; background: #0f172a; border: 1px solid #38bdf8; border-radius: 10px; padding: 10px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <span style="font-size: 10.5px; font-weight: 800; color: #38bdf8;">🧠 CÂU TRẢ LỜI CỦA AI RESQ-AID:</span>
+                <button onclick="speakCustomAiAnswer()" style="background: transparent; border: none; color: #38bdf8; font-size: 16px; cursor: pointer;">🔊</button>
+              </div>
+              <div style="font-size: 12px; color: white; line-height: 1.45;" id="aiCustomAnswerText"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast -->
+      <div id="toast" class="toast">Thông báo hệ thống</div>
+
+    </div>
+  </div>
+
+  <script>
+    // Live Clock in Dynamic Island
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('liveClock').textContent = 
+        String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Toast helper
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // Navigation System
+    function navTo(screenId) {
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        target.scrollTop = 0;
+      }
+    }
+
+    // Demo Mode Toggle
+    let isDemo = true;
+    function toggleDemoMode() {
+      isDemo = !isDemo;
+      const btn = document.getElementById('demoToggleBtn');
+      const banner = document.getElementById('statusBanner');
+      const sosBadge = document.getElementById('sosDemoBadge');
+      if (isDemo) {
+        if (btn) btn.textContent = 'Chế độ: DEMO';
+        if (banner) {
+          banner.innerHTML = '<span>⚡</span><span>HỆ THỐNG CẤP CỨU TIỀN VIỆN RESQ-AID</span>';
+        }
+        if (sosBadge) {
+          sosBadge.textContent = '115';
+          sosBadge.style.color = '#16a34a';
+        }
+      } else {
+        if (btn) btn.textContent = 'Chế độ: LIVE 115';
+        if (banner) {
+          banner.innerHTML = '<span>⚡</span><span>LIVE GPS: 16.0544° N, 108.2022° E</span>';
+        }
+        if (sosBadge) {
+          sosBadge.textContent = 'LIVE';
+          sosBadge.style.color = '#dc2626';
+        }
+      }
+      }
+    }
+
+    // SOS Action
+    let outboxEvents = 0;
+    function triggerSosAction() {
+      outboxEvents++;
+      document.getElementById('outboxBadge').textContent = outboxEvents + ' sự kiện chờ gửi';
+      document.getElementById('outboxBadge').style.background = '#fffbeb';
+      document.getElementById('outboxBadge').style.color = '#b45309';
+      document.getElementById('outboxBadge').style.borderColor = '#fde68a';
+
+      // Audio siren sound using Web Audio API
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } catch(e) {}
+
+      showToast('🚨 ĐÃ GỬI SOS! Đang gọi 115 & mở loa ngoài...');
+      setTimeout(() => {
+        navTo('screen-cpr');
+      }, 900);
+    }
+
+    function selectTriage(elem, code) {
+      document.querySelectorAll('.chip-wrap .chip').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+      showToast('Đã chọn phân loại: ' + elem.textContent);
+    }
+
+    // CPR Cockpit Engine (110 BPM)
+    let cprRunning = false;
+    let cprCount = 0;
+    let cprCycles = 0;
+    let cprTimer = null;
+    let cprElapsedTimer = null;
+    let cprElapsedSec = 0;
+    let cprActiveSec = 0;
+    let audioEnabled = true;
+
+    function playBeep() {
+      if (!audioEnabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(700, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch(e) {}
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('cprAudioBtn').textContent = audioEnabled ? '🔊' : '🔇';
+      showToast(audioEnabled ? 'Đã bật âm thanh gõ nhịp' : 'Đã tắt âm thanh gõ nhịp');
+    }
+
+    function startCpr() {
+      cprRunning = true;
+      document.getElementById('cprPlayBtn').textContent = '⏸ TẠM DỪNG';
+      const disc = document.getElementById('cprDisc');
+
+      // 110 BPM = 545ms
+      cprTimer = setInterval(() => {
+        cprCount++;
+        disc.classList.add('beat');
+        setTimeout(() => disc.classList.remove('beat'), 140);
+        playBeep();
+
+        if (cprCount >= 30) {
+          cprCount = 0;
+          cprCycles++;
+          document.getElementById('cprCycleBadge').textContent = 'Chu kỳ: ' + cprCycles;
+          showToast('💨 THỔI NGẠT 2 NHỊP!');
+        }
+        document.getElementById('cprCount').textContent = cprCount;
+      }, 545);
+
+      cprElapsedTimer = setInterval(() => {
+        cprElapsedSec++;
+        cprActiveSec++;
+        const m = String(Math.floor(cprElapsedSec / 60)).padStart(2, '0');
+        const s = String(cprElapsedSec % 60).padStart(2, '0');
+        document.getElementById('cprTime').textContent = m + ':' + s;
+        const ccf = Math.round((cprActiveSec / cprElapsedSec) * 100);
+        document.getElementById('cprCcf').textContent = ccf + '% (Chuẩn ≥60%)';
+      }, 1000);
+    }
+
+    function stopCpr() {
+      cprRunning = false;
+      clearInterval(cprTimer);
+      clearInterval(cprElapsedTimer);
+      document.getElementById('cprPlayBtn').textContent = '▶ TIẾP TỤC ÉP TIM';
+    }
+
+    function toggleCpr() {
+      if (cprRunning) stopCpr();
+      else startCpr();
+    }
+
+    function resetCpr() {
+      stopCpr();
+      cprCount = 0;
+      cprCycles = 0;
+      cprElapsedSec = 0;
+      cprActiveSec = 0;
+      document.getElementById('cprCount').textContent = '1';
+      document.getElementById('cprTime').textContent = '00:00';
+      document.getElementById('cprCycleBadge').textContent = 'Chu kỳ: 0';
+      document.getElementById('cprCcf').textContent = '100% (Chuẩn ≥60%)';
+      showToast('Đã thiết lập lại đồng hồ CPR');
+    }
+
+    function fakeCall115() {
+      showToast('📞 Đang kết nối Cấp cứu (Demo: 0384589660)...');
+    }
+
+    function saveWoundToOutbox() {
+      outboxEvents++;
+      document.getElementById('outboxBadge').textContent = outboxEvents + ' sự kiện chờ gửi';
+      document.getElementById('outboxBadge').style.background = '#fffbeb';
+      document.getElementById('outboxBadge').style.color = '#b45309';
+      showToast('✓ Đã lưu hồ sơ phân tích vết thương vào Outbox SQLite!');
+    }
+
+    // AI Wound Cases Clinical Database
+    const WOUND_CASES = {
+      burnDegree2: {
+        icon: '🔥',
+        title: 'Vết Bỏng Nước Sôi / Bỏng Nhiệt (Độ 2)',
+        sub: 'Da ửng đỏ, bọng nước phồng chứa dịch trong, đau rát dữ dội',
+        color: '#f59e0b',
+        badge: 'P1 • CẦN XỬ TRÍ Y TẾ',
+        diag: 'Bỏng biểu bì sâu / Trung bì độ 2 (Diện tích ~8-12%)',
+        desc: 'Tổn thương lớp thượng bì và một phần trung bì. Nguy cơ nhiễm trùng và sốc đau nếu không hạ nhiệt đúng cách.',
+        warning: '⚠️ CẢNH BÁO NGUY HIỂM: CẤM bôi kem đánh răng, nước mắm, mỡ trăn, cồn lên vết bỏng. CẤM dùng đá lạnh chườm trực tiếp hoặc chọc vỡ các bọng nước!',
+        steps: [
+          { num: 1, title: 'Hạ nhiệt ngay bằng nước mát 15-20 phút', desc: 'Để vết bỏng dưới vòi nước sạch chảy nhẹ nhiệt độ phòng (15-20°C) tối thiểu 15-20 phút để ngăn nhiệt lan sâu vào mô.' },
+          { num: 2, title: 'Cởi bỏ trang sức & cắt quần áo nhẹ nhàng', desc: 'Tháo nhẫn, đồng hồ trước khi chi sưng phù. Cắt vải xung quanh, KHÔNG cố giật nếu vải dính chặt vào da.' },
+          { num: 3, title: 'Bảo vệ bọng nước & băng gạc vô trùng ẩm', desc: 'Phủ gạc ẩm hoặc màng bọc thực phẩm sạch. TUYỆT ĐỐI KHÔNG chọc vỡ bọng nước (màng chống nhiễm khuẩn tự nhiên).' },
+          { num: 4, title: 'Ủ ấm chống sốc & gọi 115 chuyển viện', desc: 'Đắp chăn mỏng giữ ấm các vùng không bị bỏng. Cho uống từng ngụm nước ấm nếu tỉnh táo. Chuyển cấp cứu.' }
+        ]
+      },
+      burnDegree3: {
+        icon: '⚠️',
+        title: 'Bỏng Lửa / Hóa Chất / Điện Sâu (Độ 3)',
+        sub: 'Da cháy xém hóa than, trắng bệch hoặc xám tro, mất cảm giác đau',
+        color: '#ef4444',
+        badge: 'P0 • CỰC KỲ NGUY KỊCH',
+        diag: 'Bỏng toàn bộ các lớp da & cơ độ 3 (Nguy cơ sốc bỏng nặng)',
+        desc: 'Toàn bộ lớp da và dây thần kinh bị hủy hoại. Nạn nhân có nguy cơ suy tuần hoàn, nhiễm trùng máu và co rút sẹo nghiêm trọng.',
+        warning: '🚨 NGUY CƠ TỬ VONG CAO: Tuyệt đối không xả nước đá lạnh diện rộng (gây hạ thân nhiệt nguy kịch). Khẩn cấp chuyển viện 115!',
+        steps: [
+          { num: 1, title: 'Dập lửa & ngắt hoàn toàn nguồn nhiệt/điện', desc: 'Bảo đảm an toàn tuyệt đối cho người sơ cứu trước khi tiếp cận nạn nhân.' },
+          { num: 2, title: 'Che phủ kín bằng vải sạch vô trùng', desc: 'Dùng khăn hoặc gạc vô trùng che phủ nhẹ nhàng vùng bỏng, không chà xát.' },
+          { num: 3, title: 'Ủ ấm cơ thể và nâng cao chân', desc: 'Đặt nạn nhân nằm thoải mái, đắp chăn ấm để chống tụt huyết áp và sốc trụy mạch.' },
+          { num: 4, title: 'Khởi động CPR nếu ngừng tim', desc: 'Nếu nạn nhân bất tỉnh, không thấy lồng ngực di động -> lập tức mở máy đếm nhịp CPR 110 BPM ép tim.' }
+        ]
+      },
+      arterialBleeding: {
+        icon: '🩸',
+        title: 'Vết Rách Sâu Chảy Máu Động Mạch',
+        sub: 'Máu đỏ tươi phun thành tia mạnh theo nhịp đập của tim',
+        color: '#ef4444',
+        badge: 'P0 • ĐE DỌA TÍNH MẠNG',
+        diag: 'Tổn thương đứt động mạch ngoại vi (Nguy cơ sốc mất máu trong 3 phút)',
+        desc: 'Mất máu ồ ạt dẫn đến tử vong nhanh chóng nếu không thực hiện cầm máu khẩn cấp ngay tại hiện trường.',
+        warning: '⚠️ KHẨN CẤP: Không chần chừ tìm kiếm bông băng hoàn hảo. Ép ngón tay hoặc bàn tay trần (qua gạc/vải) trực tiếp lên điểm chảy máu ngay lập tức.',
+        steps: [
+          { num: 1, title: 'Băng ép trực tiếp liên tục', desc: 'Dùng cuộn gạc hoặc vải sạch ấn thật chặt trực tiếp lên miệng vết thương không buông trong 5-10 phút.' },
+          { num: 2, title: 'Nâng cao chi bị tổn thương', desc: 'Nâng cao phần chi bị thương cao hơn mức của tim để giảm áp lực dồn máu.' },
+          { num: 3, title: 'Đặt ga-rô khi ép trực tiếp không hiệu quả', desc: 'Buộc dải ga-rô phía trên vết thương 5cm. Siết chặt cho đến khi máu ngừng phun. GHI RÕ GIỜ ĐẶT GA-RÔ!' },
+          { num: 4, title: 'Gọi 115 và chống sốc', desc: 'Cho nạn nhân nằm đầu thấp, nâng chân cao 30cm, ủ ấm và di chuyển cấp cứu khẩn.' }
+        ]
+      },
+      openFracture: {
+        icon: '🦴',
+        title: 'Gãy Xương Cẳng Chân / Tay Biến Dạng',
+        sub: 'Đầu xương gãy chồi ra ngoài hoặc trục chi gập góc biến dạng',
+        color: '#f59e0b',
+        badge: 'P1 • KHẨN CẤP NGOẠI KHOA',
+        diag: 'Gãy xương hở / Gãy kín di lệch trục chi kèm dập cơ',
+        desc: 'Cần bất động vững chắc chi để ngăn đầu xương sắc nhọn cắt đứt mạch máu và dây thần kinh lân cận.',
+        warning: '⚠️ CẤM TUYỆT ĐỐI: Không tự ý ấn hoặc nắn đẩy đầu xương gãy thụt vào trong vết thương (gây nhiễm trùng tủy xương sâu).',
+        steps: [
+          { num: 1, title: 'Cầm máu vết thương hở (nếu có)', desc: 'Phủ gạc vô trùng lên quanh đầu xương, băng nhẹ nhàng không đè ép lên xương chồi.' },
+          { num: 2, title: 'Cố định bất động qua 2 khớp liền kề', desc: 'Dùng nẹp gỗ hoặc bìa cứng cố định cả khớp trên và khớp dưới ổ xương gãy.' },
+          { num: 3, title: 'Lót đệm êm tại các điểm tỳ đè', desc: 'Chèn vải mềm ở đầu nẹp và mắt cá/đầu gối để tránh gây hoại tử da do tỳ ép.' },
+          { num: 4, title: 'Giữ nạn nhân nằm yên & chuyển cấp cứu', desc: 'Không cho nạn nhân đứng lên đi lại. Gọi cấp cứu 115 đưa cáng cứng tới đón.' }
+        ]
+      },
+      minorAbrasion: {
+        icon: '🩹',
+        title: 'Chấn Thương Trầy Xước & Đụng Dập Nhẹ',
+        sub: 'Trầy xước biểu bì nông, rỉ máu nhẹ, sưng bầm bề mặt',
+        color: '#10b981',
+        badge: 'P2 • XỬ TRÍ TẠI CHỖ',
+        diag: 'Tổn thương trợt biểu bì & bầm dập phần mềm nông',
+        desc: 'Tổn thương ngoài da mức độ nhẹ, không nguy hiểm đến tính mạng, sơ cứu tại chỗ tốt để tránh để lại sẹo xấu.',
+        warning: '💡 LƯU Ý: Rửa sạch đất cát bằng nước muối sinh lý. Không đổ cồn 90 độ trực tiếp vào vết trầy hở.',
+        steps: [
+          { num: 1, title: 'Rửa sạch vết thương', desc: 'Rửa nhẹ nhàng dưới vòi nước sạch hoặc nước muối sinh lý 0.9% để loại bỏ dị vật, bụi bẩn.' },
+          { num: 2, title: 'Sát khuẩn bằng Betadine/Povidone', desc: 'Thoa dung dịch sát khuẩn ngoài rìa vết thương, tránh chà xát mạnh.' },
+          { num: 3, title: 'Băng bảo vệ vô trùng nhẹ', desc: 'Dùng băng cá nhân Urgo hoặc gạc mỏng che phủ để ngăn bụi bẩn bám dính.' },
+          { num: 4, title: 'Kiểm tra tiêm phòng uốn ván', desc: 'Nếu vết thương do đinh gỉ hoặc đất cát nhiễm bẩn, cần đi tiêm phòng uốn ván trong vòng 24 giờ.' }
+        ]
+      }
+    };
+
+    let activeWoundKey = 'burnDegree2';
+
+    function selectWoundCase(caseKey) {
+      activeWoundKey = caseKey;
+      document.querySelectorAll('#screen-wound-scanner .chip').forEach(c => c.classList.remove('active'));
+      const chipMap = {
+        burnDegree2: 'chip-burn2',
+        burnDegree3: 'chip-burn3',
+        arterialBleeding: 'chip-bleed',
+        openFracture: 'chip-fracture',
+        minorAbrasion: 'chip-abrasion'
+      };
+      if (document.getElementById(chipMap[caseKey])) {
+        document.getElementById(chipMap[caseKey]).classList.add('active');
+      }
+
+      // Trigger Scanning Animation
+      const laser = document.getElementById('scannerLaser');
+      laser.style.display = 'block';
+      showToast('🔬 AI đang phân tích hình ảnh vết thương...');
+
+      setTimeout(() => {
+        applyWoundData(caseKey);
+      }, 700);
+    }
+
+    function triggerRescan() {
+      selectWoundCase(activeWoundKey);
+    }
+
+    function applyWoundData(caseKey) {
+      const data = WOUND_CASES[caseKey];
+      if (!data) return;
+
+      document.getElementById('scannerIcon').textContent = data.icon;
+      document.getElementById('scannerTitle').textContent = data.title;
+      document.getElementById('scannerSub').textContent = data.sub;
+
+      const vp = document.getElementById('scannerViewport');
+      vp.style.borderColor = data.color;
+      vp.style.boxShadow = `0 0 20px ${data.color}40`;
+
+      ['reticleTL', 'reticleTR', 'reticleBL', 'reticleBR'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.borderColor = data.color;
+      });
+
+      const card = document.getElementById('triageDiagCard');
+      card.style.borderColor = data.color;
+
+      const badge = document.getElementById('triageBadge');
+      badge.textContent = data.badge;
+      badge.style.background = data.color;
+
+      document.getElementById('triageTitle').textContent = data.diag;
+      document.getElementById('triageDesc').textContent = data.desc;
+      document.getElementById('dangerWarningBox').textContent = data.warning;
+
+      const stepsContainer = document.getElementById('triageStepsList');
+      stepsContainer.innerHTML = '';
+      data.steps.forEach(s => {
+        const item = document.createElement('div');
+        item.className = 'step-card';
+        item.innerHTML = `<div style="font-size: 13px; font-weight: 700; color: #0f172a;"><span class="step-num">${s.num}</span>${s.title}</div><div style="font-size: 11.5px; color: #64748b; margin-top: 3px;">${s.desc}</div>`;
+        stepsContainer.appendChild(item);
+      });
+
+      showToast('✓ AI đã phân loại xong: ' + data.badge);
+    }
+
+    function purgeData() {
+      outboxEvents = 0;
+      document.getElementById('outboxBadge').textContent = '0 chờ gửi (Toàn vẹn)';
+      document.getElementById('outboxBadge').style.background = '#f0fdf4';
+      document.getElementById('outboxBadge').style.color = '#15803d';
+      showToast('✓ Đã xóa sạch toàn bộ dữ liệu nội bộ trên thiết bị!');
+    }
+
+    // Complete Protocols Data
+    const PROTOCOLS = [
+      {
+        code: 'PROTO_CARDIAC_ARREST',
+        title: 'Hồi sức Tim phổi Cấp cứu (CPR 110 BPM)',
+        category: 'CARDIO',
+        priority: 'P0 • TỐI KHẨN',
+        priorityColor: '#dc2626',
+        icon: '❤️',
+        target: 'Người lớn & Trẻ em (> 1 tuổi)',
+        summary: 'Ép tim liên tục nhịp độ 110 BPM, sâu 5-6 cm giữa ngực để duy trì tưới máu não.',
+        steps: [
+          { num: 1, title: 'Kiểm tra phản xạ & Nhịp thở', desc: 'Vỗ mạnh hai vai, gọi to "Anh/Chị có sao không?". Nhìn lồng ngực xem có phập phồng không trong 10 giây.', warn: 'Nếu không thở hoặc ngáy ngáp cá -> lập tức ép tim ngay.' },
+          { num: 2, title: 'Gọi 115 & Bật loa ngoài', desc: 'Nhờ người xung quanh gọi 115 và tìm máy sốc điện AED. Đặt điện thoại cạnh nạn nhân.', warn: null },
+          { num: 3, title: 'Tư thế ép tim chuẩn AHA', desc: 'Đặt gót bàn tay vào 1/2 dưới xương ức. Khóa thẳng khuỷu tay vuông góc 90°. Ép sâu 5-6 cm.', warn: 'Để ngực nở hoàn toàn sau mỗi lần ép.' },
+          { num: 4, title: 'Ép tim liên tục 110 BPM', desc: 'Duy trì ép tim liên tục không ngừng quá 10 giây. Đổi người ép mỗi 2 phút nếu mệt.', warn: null }
+        ],
+        contra: ['Không dừng ép tim quá 10 giây.', 'Không ép lệch sang vùng xương sườn hoặc mũi ức dạ dày.']
+      },
+      {
+        code: 'PROTO_CHOKING',
+        title: 'Sơ cứu Mắc dị vật đường thở (Heimlich)',
+        category: 'CARDIO',
+        priority: 'P0 • TỐI KHẨN',
+        priorityColor: '#dc2626',
+        icon: '🗣️',
+        target: 'Người lớn & Trẻ em',
+        summary: 'Tống dị vật ra khỏi khí quản bằng phản xạ ho hoặc thủ thuật Heimlich.',
+        steps: [
+          { num: 1, title: 'Nhận biết dấu hiệu nghẹn', desc: 'Hỏi to "Bạn có nghẹn không?". Nếu nạn nhân ho to, nói được -> khuyến khích ho mạnh, KHÔNG can thiệp.', warn: 'Nếu không nói được, ôm cổ, mặt tím tái -> lập tức can thiệp ngay.' },
+          { num: 2, title: '5 cú vỗ lưng', desc: 'Đứng chếch phía sau, dùng gót bàn tay vỗ mạnh 5 lần vào giữa hai xương bả vai hướng lên phía trước.', warn: null },
+          { num: 3, title: 'Thủ thuật Heimlich (5 lần ép bụng)', desc: 'Vòng tay ra trước bụng, đặt nắm đấm ở giữa rốn và mũi ức, giật mạnh theo hướng VÀO TRONG và LÊN TRÊN.', warn: 'Với trẻ sơ sinh < 1 tuổi: Dùng 2 ngón tay ấn ngực, không ép bụng.' },
+          { num: 4, title: 'Xử lý khi bất tỉnh', desc: 'Nếu nạn nhân bất tỉnh -> đặt nằm ngửa, bấm nút CPR để ép tim 110 BPM ngay.', warn: 'Tuyệt đối không dùng tay móc họng mù quáng.' }
+        ],
+        contra: ['Không vỗ lưng khi nạn nhân đang ho mạnh thành tiếng.', 'Không ép bụng phụ nữ mang thai hoặc trẻ sơ sinh dưới 1 tuổi.']
+      },
+      {
+        code: 'PROTO_DROWNING',
+        title: 'Sơ cứu Nạn nhân Đuối nước',
+        category: 'CARDIO',
+        priority: 'P1 • NGUY KỊCH',
+        priorityColor: '#d97706',
+        icon: '🌊',
+        target: 'Mọi lứa tuổi',
+        summary: 'Đưa nạn nhân lên bờ, thông khí khẩn cấp bằng 5 nhịp thổi ngạt trước khi ép tim.',
+        steps: [
+          { num: 1, title: 'Đưa lên bờ an toàn', desc: 'Đảm bảo an toàn cho người cứu hộ. Dùng phao, sào dài. Đưa nạn nhân lên bờ khô ráo.', warn: 'Không nhảy xuống nước nếu bạn không biết bơi cứu hộ.' },
+          { num: 2, title: 'Kiểm tra đường thở & làm sạch miệng', desc: 'Ngửa đầu nâng cằm kiểm tra miệng có bùn đất rong rêu thì lấy sạch.', warn: 'Tuyệt đối KHÔNG xốc nước vác nạn nhân chạy quanh (gây trào ngược dịch phổi).' },
+          { num: 3, title: '5 nhịp thổi ngạt đầu tiên', desc: 'Nếu nạn nhân không thở -> bịt mũi, thổi ngạt 5 lần liên tiếp để nở phổi và cung cấp oxy.', warn: 'Mỗi nhịp thổi khoảng 1 giây, quan sát lồng ngực phập phồng.' },
+          { num: 4, title: 'Ép tim kết hợp thổi ngạt (30:2)', desc: 'Sau 5 nhịp thổi nếu vẫn chưa thở -> ép tim 30 nhịp kết hợp 2 nhịp thổi ngạt liên tục.', warn: null }
+        ],
+        contra: ['Không cố xốc nước khỏi bụng hoặc phổi.', 'Không ngừng ép tim quá 10 giây.']
+      },
+      {
+        code: 'PROTO_BURNS',
+        title: 'Sơ cứu Vết Bỏng (Nhiệt, Nước sôi, Hóa chất)',
+        category: 'ALLERGY',
+        priority: 'P2 • KHẨN CẤP',
+        priorityColor: '#0284c7',
+        icon: '🔥',
+        target: 'Mọi lứa tuổi',
+        summary: 'Hạ nhiệt vết bỏng bằng nước sạch mát trong 15-20 phút, che phủ vô khuẩn.',
+        steps: [
+          { num: 1, title: 'Tách khỏi nguồn gây bỏng', desc: 'Dập lửa, ngắt nguồn nhiệt, hoặc cởi bỏ quần áo dính hóa chất/nước sôi nhẹ nhàng.', warn: 'Nếu quần áo dính chặt vào da, cắt xung quanh, không cố giật ra.' },
+          { num: 2, title: 'Ngâm xả nước mát 15-20 phút', desc: 'Để vết bỏng dưới vòi nước sạch chảy nhẹ nhiệt độ phòng (15-20°C) tối thiểu 15-20 phút.', warn: 'TUYỆT ĐỐI KHÔNG dùng nước đá hoặc đá lạnh trực tiếp.' },
+          { num: 3, title: 'Che phủ vết thương vô trùng', desc: 'Bọc nhẹ nhàng vết bỏng bằng gạc vô trùng ẩm hoặc màng bọc thực phẩm sạch.', warn: 'Không chọc vỡ các bọng nước phồng rộp.' },
+          { num: 4, title: 'Ủ ấm và chuyển viện', desc: 'Ủ ấm toàn thân chống sốc nhiệt, cho uống từng ngụm nước ấm nếu tỉnh táo. Chuyển viện 115.', warn: 'Cấm bôi mỡ trăn, kem đánh răng, nước mắm, trứng gà lên vết bỏng.' }
+        ],
+        contra: ['Không chườm đá lạnh trực tiếp.', 'Không chọc thủng bọng nước.', 'Không bôi bất kỳ chất lạ nào lên vết bỏng.']
+      },
+      {
+        code: 'PROTO_ELECTROCUTION',
+        title: 'Sơ cứu Nạn nhân Bị Điện giật',
+        category: 'ACCIDENT',
+        priority: 'P1 • NGUY KỊCH',
+        priorityColor: '#d97706',
+        icon: '⚡',
+        target: 'Mọi lứa tuổi',
+        summary: 'Ngắt nguồn điện an toàn trước tiên, hồi sức CPR ngay nếu có rung thất/ngừng tim.',
+        steps: [
+          { num: 1, title: 'Ngắt nguồn điện khẩn cấp', desc: 'Ngắt cầu dao, aptomat hoặc dùng gậy gỗ/nhựa khô gạt dây điện ra xa nạn nhân.', warn: 'Tuyệt đối không chạm vào nạn nhân nếu chưa ngắt điện hoàn toàn.' },
+          { num: 2, title: 'Đánh giá an toàn hiện trường', desc: 'Kiểm tra xem vùng xung quanh có ẩm ướt, còn rò rỉ điện không trước khi tiếp cận.', warn: 'Không tiếp cận điện cao thế trong phạm vi dưới 10 mét.' },
+          { num: 3, title: 'Kiểm tra tuần hoàn và hô hấp', desc: 'Điện giật thường gây rung thất làm ngừng tim đột ngột. Kiểm tra nhịp thở tối đa 10 giây.', warn: null },
+          { num: 4, title: 'CPR 110 BPM ngay lập tức', desc: 'Nếu bất tỉnh và ngừng thở -> bắt đầu ép tim ngay theo nhịp 110 BPM và gọi 115.', warn: 'Nếu có máy sốc điện AED gần đó, lấy và gắn bản cực ngay.' }
+        ],
+        contra: ['Không chạm tay trần vào người nạn nhân khi nguồn điện còn bật.', 'Không dùng vật dẫn điện gạt dây điện.']
+      },
+      {
+        code: 'PROTO_ANAPHYLAXIS',
+        title: 'Sơ cứu Sốc phản vệ & Dị ứng Nặng',
+        category: 'ALLERGY',
+        priority: 'P0 • TỐI KHẨN',
+        priorityColor: '#dc2626',
+        icon: '🩹',
+        target: 'Mọi lứa tuổi',
+        summary: 'Đặt nạn nhân nằm ngửa kê cao chân, tiêm bút Epinephrine (nếu có) và gọi 115 khẩn cấp.',
+        steps: [
+          { num: 1, title: 'Nhận diện dấu hiệu nguy kịch', desc: 'Nổi mề đay toàn thân kết hợp khó thở, thở rít, khàn tiếng, sưng môi mắt, chóng mặt tụt huyết áp.', warn: 'Sốc phản vệ diễn tiến cực nhanh gây ngạt thở tử vong trong vài phút.' },
+          { num: 2, title: 'Tiêm Epipen/Adrenaline (Nếu có sẵn)', desc: 'Cầm chắc bút tiêm tự động, ấn vuông góc vào mặt ngoài 1/3 giữa đùi. Giữ chặt 3 - 5 giây.', warn: null },
+          { num: 3, title: 'Tư thế cấp cứu chống sốc', desc: 'Đặt nạn nhân nằm ngửa, kê chân cao khoảng 30 cm. Nếu khó thở nhiều, cho ngồi tựa nhẹ.', warn: 'KHÔNG cho nạn nhân đứng dậy hoặc đi lại.' },
+          { num: 4, title: 'Sẵn sàng hồi sức CPR', desc: 'Theo dõi sát nhịp thở. Nếu ngừng thở hoặc mất mạch -> lập tức khởi động CPR 110 BPM.', warn: 'Gọi ngay 115 báo tình trạng "Nghi ngờ sốc phản vệ khẩn cấp".' }
+        ],
+        contra: ['Không cho nạn nhân đứng lên hoặc đi bộ.', 'Không cho uống nước nếu nạn nhân đang nôn mửa hoặc lơ mơ.']
+      },
+      {
+        code: 'PROTO_STROKE',
+        title: 'Nhận diện & Sơ cứu Đột quỵ Não (FAST)',
+        category: 'CARDIO',
+        priority: 'P1 • NGUY KỊCH',
+        priorityColor: '#d97706',
+        icon: '🧠',
+        target: 'Người lớn & Người cao tuổi',
+        summary: 'Nhận diện theo quy tắc F.A.S.T, ghi nhớ giờ khởi phát và gọi 115 trong "Cửa sổ vàng 4.5h".',
+        steps: [
+          { num: 1, title: 'F - Face (Mặt méo, lệch nụ cười)', desc: 'Yêu cầu bệnh nhân cười hoặc nhe răng. Quan sát xem một bên miệng có bị xệ hoặc méo không.', warn: null },
+          { num: 2, title: 'A - Arm (Yếu liệt tay chân)', desc: 'Yêu cầu giơ 2 tay lên cao song song trong 10 giây. Xem 1 tay có bị trôi rơi xuống không.', warn: null },
+          { num: 3, title: 'S - Speech (Nói ngọng, ú ớ)', desc: 'Yêu cầu nhắc lại một câu đơn giản. Lắng nghe xem giọng có méo, ngọng, hoặc không nói được không.', warn: null },
+          { num: 4, title: 'T - Time (Giờ vàng & Gọi 115)', desc: 'Ghi lại chính xác giờ khởi phát triệu chứng. Đặt bệnh nhân nằm nghiêng an toàn đầu cao 30°.', warn: 'TUYỆT ĐỐI KHÔNG cạo gió, chích máu đầu ngón tay, hoặc cho uống thuốc hạ áp/An Cung.' }
+        ],
+        contra: ['CẤM chích nặn máu 10 đầu ngón tay hoặc dái tai.', 'CẤM cho uống bất kỳ loại thuốc nào khi chưa có phim chụp CT não.']
+      },
+      {
+        code: 'PROTO_TRAUMA',
+        title: 'Sơ cứu Chấn thương Chảy máu & Gãy xương',
+        category: 'ACCIDENT',
+        priority: 'P2 • KHẨN CẤP',
+        priorityColor: '#0284c7',
+        icon: '🏥',
+        target: 'Mọi lứa tuổi',
+        summary: 'Cầm máu trực tiếp bằng băng ép, cố định bất động chi gãy và cột sống cổ.',
+        steps: [
+          { num: 1, title: 'Ép trực tiếp cầm máu', desc: 'Dùng gạc sạch ép chặt trực tiếp lên vị trí vết thương chảy máu liên tục 5-10 phút.', warn: 'Nếu máu thấm qua gạc, đặt thêm lớp mới lên trên, KHÔNG gỡ lớp cũ ra.' },
+          { num: 2, title: 'Cố định bất động chi gãy', desc: 'Dùng nẹp cứng lót đệm vải và cố định qua 2 khớp liền kề của xương gãy.', warn: 'Tuyệt đối không cố nắn chỉnh đầu xương bị lệch hoặc thụt vào trong.' },
+          { num: 3, title: 'Bảo vệ cột sống cổ', desc: 'Nếu nạn nhân bị tai nạn giao thông, té ngã từ trên cao -> giữ thẳng đầu và cổ, tránh xoay lắc.', warn: 'Không di chuyển nạn nhân trừ khi hiện trường cháy nổ nguy hiểm.' },
+          { num: 4, title: 'Theo dõi sốc và chờ 115', desc: 'Ủ ấm, nâng cao chân nếu không gãy xương chi dưới. Giữ nạn nhân bình tĩnh.', warn: 'Không cho nạn nhân ăn uống phòng trường hợp cần phẫu thuật cấp cứu.' }
+        ],
+        contra: ['Không tự ý nắn xương gãy tại hiện trường.', 'Không rút các dị vật nhọn cắm sâu trong cơ thể.']
+      }
+    ];
+
+    let currentCategory = 'ALL';
+    let searchQuery = '';
+
+    function removeVietnameseDiacritics(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[đĐ]/g, "d")
+        .trim();
+    }
+
+    function renderProtocols() {
+      const container = document.getElementById('protocolList');
+      container.innerHTML = '';
+
+      const cleanQuery = searchQuery.trim().toLowerCase();
+      const cleanQueryNoDia = removeVietnameseDiacritics(cleanQuery);
+
+      const filtered = PROTOCOLS.filter(p => {
+        const titleNoDia = removeVietnameseDiacritics(p.title);
+        const summaryNoDia = removeVietnameseDiacritics(p.summary);
+
+        // When searching, match across ALL categories automatically
+        const matchCat = cleanQuery !== '' || currentCategory === 'ALL' || p.category === currentCategory;
+        const matchSearch = cleanQuery === '' || 
+          p.title.toLowerCase().includes(cleanQuery) ||
+          titleNoDia.includes(cleanQueryNoDia) ||
+          p.summary.toLowerCase().includes(cleanQuery) ||
+          summaryNoDia.includes(cleanQueryNoDia) ||
+          p.code.toLowerCase().includes(cleanQuery) ||
+          (p.contra && p.contra.some(c => c.toLowerCase().includes(cleanQuery) || removeVietnameseDiacritics(c).includes(cleanQueryNoDia))) ||
+          (p.steps && p.steps.some(s => s.title.toLowerCase().includes(cleanQuery) || removeVietnameseDiacritics(s.title).includes(cleanQueryNoDia) || s.desc.toLowerCase().includes(cleanQuery) || removeVietnameseDiacritics(s.desc).includes(cleanQueryNoDia)));
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 13px;">Không tìm thấy phác đồ phù hợp.<br>Thử tìm: CPR, đuối nước, bỏng...</div>';
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'info-card';
+        card.onclick = () => openProtocol(p.code);
+        card.innerHTML = `
+          <div style="width: 44px; height: 44px; background: rgba(2, 132, 199, 0.08); border: 1px solid rgba(2, 132, 199, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+            ${p.icon}
+          </div>
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="background: ${p.priorityColor}18; color: ${p.priorityColor}; font-size: 9.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">${p.priority}</span>
+              <span style="font-size: 10px; color: #94a3b8; font-weight: 600;">v1.0 • Chuẩn Y tế</span>
+            </div>
+            <div style="font-size: 13.5px; font-weight: 800; color: #0f172a; margin: 3px 0 2px 0;">${p.title}</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+              ${p.summary}
+            </div>
+          </div>
+          <div style="font-size: 16px; color: #cbd5e1;">›</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterProtocols() {
+      searchQuery = document.getElementById('handbookSearch').value.trim().toLowerCase();
+      if (searchQuery !== '') {
+        const allChip = document.querySelector('#screen-handbook .chip');
+        if (allChip) {
+          document.querySelectorAll('#screen-handbook .chip').forEach(c => c.classList.remove('active'));
+          allChip.classList.add('active');
+          currentCategory = 'ALL';
+        }
+      }
+      renderProtocols();
+    }
+
+    function filterCategory(elem, cat) {
+      document.querySelectorAll('#screen-handbook .chip').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+      currentCategory = cat;
+      renderProtocols();
+    }
+
+    let activeProtocol = null;
+    function openProtocol(code) {
+      activeProtocol = PROTOCOLS.find(p => p.code === code) || PROTOCOLS[0];
+      document.getElementById('detailTitle').textContent = activeProtocol.title;
+      document.getElementById('detailTarget').textContent = 'Đối tượng: ' + activeProtocol.target;
+      document.getElementById('detailSummary').textContent = activeProtocol.summary;
+
+      // Render steps
+      const stepsDiv = document.getElementById('detailSteps');
+      stepsDiv.innerHTML = '';
+      activeProtocol.steps.forEach(s => {
+        const stepCard = document.createElement('div');
+        stepCard.className = 'step-card';
+        stepCard.innerHTML = `
+          <div style="display: flex; align-items: center; margin-bottom: 6px;">
+            <span class="step-num">${String(s.num).padStart(2, '0')}</span>
+            <strong style="font-size: 13.5px; color: #0f172a;">${s.title}</strong>
+          </div>
+          <div style="font-size: 12px; color: #334155; line-height: 1.4;">${s.desc}</div>
+          ${s.warn ? `<div class="step-warning">⚠️ ${s.warn}</div>` : ''}
+        `;
+        stepsDiv.appendChild(stepCard);
+      });
+
+      // Render contraindications
+      const contraList = document.getElementById('detailContraList');
+      contraList.innerHTML = '';
+      activeProtocol.contra.forEach(c => {
+        const li = document.createElement('li');
+        li.textContent = c;
+        li.style.marginBottom = '3px';
+        contraList.appendChild(li);
+      });
+
+      navTo('screen-detail');
+    }
+
+    function speakDetail() {
+      if (!activeProtocol) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const text = activeProtocol.title + '. ' + activeProtocol.summary + '. ' +
+          activeProtocol.steps.map(s => 'Bước ' + s.num + ': ' + s.title + '. ' + s.desc).join('. ');
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+        showToast('🔊 Đang đọc hướng dẫn bằng giọng nói tiếng Việt...');
+      } else {
+        showToast('Trình duyệt không hỗ trợ tổng hợp giọng nói');
+      }
+    }
+
+    // ==========================================
+    // AI FIRST-AID ASSISTANT KNOWLEDGE & ENGINE
+    // ==========================================
+    const AI_KNOWLEDGE = {
+      'PROTO_BURNS': {
+        icon: '🔥',
+        title: 'Vết Bỏng Nhiệt / Nước Sôi / Hóa Chất',
+        urgency: 'P1 • CẦN XỬ TRÍ Y TẾ KHẨN',
+        why: 'Nhiệt độ cao làm đông vón protein tế bào biểu bì, làm giãn nở và phá vỡ tính thấm mao mạch, khiến dịch huyết tương thoát ra ngoài tích tụ thành bọng nước phồng rộp. Dây thần kinh cảm giác bị kích thích gây đau rát cực độ.',
+        action: '1. Để vết bỏng dưới vòi nước sạch mát (15-20°C) chảy nhẹ liên tục trong 15-20 phút nhằm hạ nhiệt mô sâu.\n2. Cởi nhẹ trang sức, đồng hồ trước khi sưng nề.\n3. Dùng gạc vô trùng ẩm hoặc màng bọc thực phẩm sạch phủ nhẹ.',
+        contra: '⛔ CẤM bôi kem đánh răng, nước mắm, mỡ trăn. CẤM chườm đá lạnh trực tiếp (gây hoại tử bỏng lạnh). CẤM chọc vỡ bọng nước.',
+        canCpr: false,
+        faqs: [
+          { q: 'Vì sao không được chườm đá lạnh lên vết bỏng?', a: 'Đá lạnh làm co thắt mạch máu đột ngột, làm giảm nguồn máu nuôi tới vùng da bị thương và gây ra hiện tượng bỏng lạnh, khiến mô bị hoại tử sâu hơn nhiều so với bình thường.' },
+          { q: 'Bọng nước phồng lên có nên chọc vỡ để xẹp xuống không?', a: 'TUYỆT ĐỐI KHÔNG! Lớp da bọng nước là màng bảo vệ vô trùng sinh học tốt nhất giúp ngăn ngừa vi khuẩn xâm nhập vào mô trung bì đang bị tổn thương hở.' },
+          { q: 'Khi nào cần gọi 115 ngay cho nạn nhân bị bỏng?', a: 'Gọi 115 ngay nếu: Vết bỏng ở mặt, mắt, khớp lớn, bộ phận sinh dục; Bỏng diện tích lớn (> 10% cơ thể); Bỏng do điện hoặc hóa chất đậm đặc.' }
+        ]
+      },
+      'PROTO_ELECTROCUTION': {
+        icon: '⚡',
+        title: 'Tổn Thương Bỏng Điện & Rung Thất Sau Giật Điện',
+        urgency: 'P0 • CỰC KỲ NGUY KỊCH',
+        why: 'Dòng điện đi vào cơ thể chuyển thành nhiệt năng cực lớn chạy dọc theo xương và mạch máu, làm cháy xém mô sâu bên trong. Nguy hiểm nhất: dòng điện làm đảo lộn hệ thống phát xung điện tim, gây rung thất và ngừng tim đột ngột ngay sau khi tách điện.',
+        action: '1. Đảm bảo nguồn điện đã ngắt 100% trước khi chạm vào nạn nhân.\n2. Kiểm tra vết thương điểm vào (thường ở tay) và điểm thoát (thường ở bàn chân).\n3. Kiểm tra nhịp thở trong 10 giây. Nếu không thở, bật ngay buồng lái CPR 110 BPM ép tim!',
+        contra: '⛔ CẤM chạm tay trần vào nạn nhân khi nguồn điện chưa ngắt. CẤM dùng thanh kim loại hoặc vật ẩm ướt để gạt dây điện.',
+        canCpr: true,
+        faqs: [
+          { q: 'Vết thương sau giật điện có đặc điểm gì đặc biệt?', a: 'Điện giật luôn có ít nhất 2 vết thương: "Điểm vào" (nơi chạm dây điện, thường cháy sém lòng bàn tay) và "Điểm ra" (nơi dòng điện thoát xuống đất, thường ở gót chân). Mô nằm giữa hai điểm này bị tổn thương cháy sâu bên trong dù bề ngoài nhìn nhẹ.' },
+          { q: 'Nạn nhân bị điện giật đã tỉnh lại thì có cần đi viện không?', a: 'BẮT BUỘC PHẢI ĐI VIỆN! Rối loạn nhịp tim (rung thất muộn) và hoại tử cơ giải phóng myoglobin gây suy thận cấp có thể xuất hiện sau vài giờ đến 24 giờ.' },
+          { q: 'Dùng gì để gạt dây điện an toàn khỏi nạn nhân?', a: 'Dùng vật liệu cách điện hoàn toàn: gậy gỗ khô, ống nhựa PVC khô, cán chổi nhựa. Đứng trên tấm ván gỗ khô hoặc thảm cao su.' }
+        ]
+      },
+      'PROTO_CHOKING': {
+        icon: '🗣️',
+        title: 'Hóc Dị Vật Đường Thở (Tắc Nghẽn Khí Đạo Cấp)',
+        urgency: 'P0 • TỐI KHẨN',
+        why: 'Dị vật kẹt ngang nắp thanh môn hoặc khí quản làm tắc nghẽn hoàn toàn luồng dưỡng khí vào phổi. Não bộ chỉ chịu đựng thiếu oxy tối đa 3-4 phút trước khi tổn thương tế bào vỏ não không hồi phục và ngừng tim.',
+        action: '1. Nhận diện dấu hiệu bàn tay ôm cổ (Universal Choking Sign).\n2. Nếu ho mạnh được: Khuyến khích ho, KHÔNG can thiệp.\n3. Nếu khó thở/tím tái: Đứng sau lưng, vòng tay ép bụng Heimlich giật mạnh VÀO TRONG & LÊN TRÊN.',
+        contra: '⛔ CẤM dùng tay móc họng mù quáng (làm đẩy dị vật kẹt sâu hơn). CẤM ép bụng cho trẻ dưới 1 tuổi (dùng vỗ lưng ấn ngực).',
+        canCpr: true,
+        faqs: [
+          { q: 'Cơ chế của thủ thuật Heimlich là gì?', a: 'Thủ thuật tạo ra một áp lực dương đột ngột từ khoang bụng đẩy cơ hoành dâng lên, nén luồng không khí còn sót lại trong 2 lá phổi tống dị vật văng ra ngoài như một phát súng nút chai.' },
+          { q: 'Làm sao phân biệt hóc dị vật hoàn toàn và không hoàn toàn?', a: 'Không hoàn toàn: Nạn nhân vẫn ho mạnh, thở rít và nói được -> hãy để nạn nhân tự ho. Hoàn toàn: Nạn nhân ôm cổ, im bặt không nói được, môi tím tái -> phải can thiệp ngay!' },
+          { q: 'Nếu nạn nhân hóc dị vật mang thai thì ép ở đâu?', a: 'Phụ nữ có thai to hoặc người béo phì: Vòng tay qua nách và ép ở giữa xương ức (ngang ngực), KHÔNG ép vào khoang bụng.' }
+        ]
+      },
+      'PROTO_DROWNING': {
+        icon: '🌊',
+        title: 'Ngạt Nước & Phù Phổi Cấp Do Đuối Nước',
+        urgency: 'P1 • NGUY KỊCH',
+        why: 'Nước tràn vào thanh quản gây phản xạ co thắt đóng nắp thanh môn, tiếp đó nước thâm nhập vào phế nang rửa trôi chất surfactant, khiến các túi phổi xẹp lép không thể trao đổi oxy, dẫn tới thiếu máu não cấp.',
+        action: '1. Đưa nạn nhân lên bờ, đặt nằm ngửa trên mặt phẳng cứng.\n2. Khai thông đường thở (ngửa đầu nâng cằm) và THỔI NGẠT 5 NHỊP ĐẦU TIÊN để cấp oxy khẩn.\n3. Nếu không tỉnh, lập tức phối hợp ép tim theo chu kỳ 30 ép : 2 thổi.',
+        contra: '⛔ CẤM dốc ngược vác nạn nhân chạy quanh (làm trào ngược dịch dạ dày vào phổi). CẤM nhảy xuống cứu nếu không biết bơi cứu hộ.',
+        canCpr: true,
+        faqs: [
+          { q: 'Vì sao lại cấm vác xóc nước nạn nhân đuối nước?', a: 'Lượng nước nạn nhân hít vào phổi rất ít (chỉ vài mililit), phần lớn nước nằm trong dạ dày. Vác xóc nước sẽ khiến dịch axit dạ dày trào ngược vào phổi, gây co thắt đường thở và tử vong tức thì.' },
+          { q: 'Tại sao nạn nhân đuối nước lại cần thổi ngạt 5 nhịp trước khi ép tim?', a: 'Khác với ngừng tim do bệnh tim (vẫn còn oxy tồn dư trong máu), nạn nhân đuối nước chết vì thiếu oxy tiên phát. Do đó thổi ngạt 5 nhịp đầu tiên là tối cần thiết để cứu tế bào não.' },
+          { q: 'Nạn nhân uống phải nước mặn hay nước ngọt nguy hiểm hơn?', a: 'Nước biển mặn ưu trương hút nước từ máu vào phổi gây phù phổi cấp cực nhanh; Nước ngọt nhược trương ngấm vào máu gây vỡ hồng cầu và rối loạn điện giải. Cả hai đều cực kỳ nguy hiểm và bắt buộc phải nhập viện cấp cứu.' }
+        ]
+      },
+      'PROTO_STROKE': {
+        icon: '🧠',
+        title: 'Nhận Diện Tai Biến Mạch Máu Não (Đột Quỵ Cấp)',
+        urgency: 'P1 • NGUY KỊCH',
+        why: 'Cục máu đông làm tắc mạch máu não hoặc vỡ mạch máu gây xuất huyết não, khiến hàng triệu tế bào não chết đi mỗi phút. Cửa sổ vàng can thiệp tái tưới máu là 4.5 giờ.',
+        action: '1. Kiểm tra FAST: Mặt lệch, tay yếu rơi, nói ngọng ngắt quãng.\n2. Ghi lại chính xác giờ khởi phát triệu chứng đầu tiên.\n3. Đặt nằm nghiêng an toàn đầu cao 30° và gọi 115 chuyển bệnh viện có can thiệp đột quỵ.',
+        contra: '⛔ CẤM cạo gió, trích máu 10 đầu ngón tay hay dái tai. CẤM cho uống thuốc hạ áp, An Cung hay bất kỳ thức uống nào khi chưa chụp CT não.',
+        canCpr: false,
+        faqs: [
+          { q: 'Vì sao cấm chích máu đầu ngón tay khi bị đột quỵ?', a: 'Chích máu gây đau làm kích hoạt phản xạ thần kinh giao cảm phóng thích adrenaline, khiến huyết áp vọt lên cao dữ dội, dễ làm vỡ mạch máu não dẫn tới xuất huyết ồ ạt tử vong tại chỗ.' },
+          { q: 'Vì sao không được cho uống thuốc hạ áp tại nhà?', a: 'Khi tắc mạch não, cơ thể tự động tăng huyết áp để cố gắng đẩy máu qua chỗ hẹp nuôi vùng não thiếu máu. Hạ áp đột ngột sẽ làm sụp đổ tưới máu não và mở rộng vùng não bị chết.' },
+          { q: 'Khái niệm "Giờ vàng 4.5h" có ý nghĩa sống còn như thế nào?', a: 'Trong vòng 4.5 giờ đầu từ khi khởi phát, bác sĩ có thể dùng thuốc tiêu sợi huyết (Alteplase) làm tan cục máu đông hoặc can thiệp lấy huyết khối cơ học, phục hồi hoàn toàn di chứng liệt.' }
+        ]
+      },
+      'PROTO_TRAUMA': {
+        icon: '🏥',
+        title: 'Chấn Thương Chảy Máu Động Mạch & Gãy Xương',
+        urgency: 'P2 • KHẨN CẤP',
+        why: 'Đứt rách động mạch lớn gây mất máu thể tích nhanh, dẫn tới trụy tim mạch và sốc mất máu trong 3-5 phút. Gãy xương không cố định sẽ làm đầu xương sắc nhọn cứa đứt mạch máu và dây thần kinh lân cận.',
+        action: '1. Ép trực tiếp bằng gạc dày lên vết thương chảy máu.\n2. Cố định chi gãy qua 2 khớp liền kề bằng nẹp cứng độn êm.\n3. Giữ thẳng trục đầu - cổ - thân mình nếu nghi ngờ chấn thương cột sống.',
+        contra: '⛔ CẤM tự ý nắn chỉnh đầu xương bị cong vẹo. CẤM rút dị vật nhọn (dao, cọc) đang cắm sâu trong cơ thể.',
+        canCpr: false,
+        faqs: [
+          { q: 'Khi nào mới được dùng garô cầm máu?', a: 'Chỉ dùng garô khi: Vết thương cụt chi hoàn toàn, hoặc chảy máu động mạch phun thành tia dữ dội mà phương pháp ép trực tiếp và băng chèn không thể cầm được máu.' },
+          { q: 'Vì sao cấm rút vật nhọn cắm sâu trong vết thương?', a: 'Dị vật nhọn đóng vai trò như một nút chặn tự nhiên ép vào miệng mạch máu bị rách. Rút ra sẽ làm bung mạch máu, khiến máu phun ồ ạt không thể cầm được tại hiện trường.' },
+          { q: 'Nguyên tắc bất động xương gãy gồm những gì?', a: 'Phải cố định bất động nẹp qua ít nhất 2 khớp liền kề (khớp trên và khớp dưới ổ gãy), lót đệm bông vải ở các đầu xương gồ ghề, không nắn bẻ lại xương.' }
+        ]
+      }
+    };
+
+    let activeAiTab = 0;
+    let isAiScanning = false;
+    let aiCountdownTimer = null;
+    let currentAiKnowledge = null;
+
+    function openAiModal() {
+      const code = activeProtocol ? activeProtocol.code : 'PROTO_BURNS';
+      currentAiKnowledge = AI_KNOWLEDGE[code] || AI_KNOWLEDGE['PROTO_BURNS'];
+
+      document.getElementById('aiModalProtocolTitle').textContent = 'TRỢ LÝ AI: ' + (activeProtocol ? activeProtocol.title : 'SƠ CỨU');
+      document.getElementById('aiModalIcon').textContent = currentAiKnowledge.icon;
+      document.getElementById('aiDiagTitle').textContent = currentAiKnowledge.title;
+      document.getElementById('aiDiagUrgency').textContent = currentAiKnowledge.urgency;
+      document.getElementById('aiDiagWhy').textContent = currentAiKnowledge.why;
+      document.getElementById('aiDiagAction').textContent = currentAiKnowledge.action;
+      document.getElementById('aiDiagContra').textContent = currentAiKnowledge.contra;
+
+      const cprBtn = document.getElementById('aiCprShortcut');
+      cprBtn.style.display = currentAiKnowledge.canCpr ? 'block' : 'none';
+
+      // Render FAQs
+      renderAiFaqs(currentAiKnowledge.faqs);
+
+      // Reset tabs & scan state
+      switchAiTab(0);
+      resetAiScanView();
+
+      document.getElementById('aiAssistantModal').classList.add('active');
+    }
+
+    function closeAiModal() {
+      if (aiCountdownTimer) clearInterval(aiCountdownTimer);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.getElementById('aiAssistantModal').classList.remove('active');
+    }
+
+    function switchAiTab(tabIdx) {
+      activeAiTab = tabIdx;
+      document.getElementById('aiTabBtn0').style.background = tabIdx === 0 ? '#0284c7' : 'transparent';
+      document.getElementById('aiTabBtn0').style.color = tabIdx === 0 ? 'white' : '#94a3b8';
+      document.getElementById('aiTabBtn1').style.background = tabIdx === 1 ? '#0284c7' : 'transparent';
+      document.getElementById('aiTabBtn1').style.color = tabIdx === 1 ? 'white' : '#94a3b8';
+
+      document.getElementById('aiTabContent0').style.display = tabIdx === 0 ? 'block' : 'none';
+      document.getElementById('aiTabContent1').style.display = tabIdx === 1 ? 'block' : 'none';
+    }
+
+    function resetAiScanView() {
+      isAiScanning = false;
+      document.getElementById('aiLaserLine').style.display = 'none';
+      document.getElementById('aiModalGuideText').textContent = 'HƯỚNG CAMERA VỀ NẠN NHÂN / VẾT THƯƠNG';
+      document.getElementById('aiModalStatusPill').innerHTML = '<span style="width: 5px; height: 5px; background: #4ade80; border-radius: 50%;"></span> AI VISION SẴN SÀNG';
+      const btn = document.getElementById('aiScanBtn');
+      btn.innerHTML = '<span>📸</span> BẮT ĐẦU QUÉT AI (GIỮ YÊN 2 GIÂY)';
+      btn.style.background = '#0284c7';
+      btn.disabled = false;
+    }
+
+    function startAiScan() {
+      if (isAiScanning) return;
+      isAiScanning = true;
+
+      // Start laser
+      document.getElementById('aiLaserLine').style.display = 'block';
+      document.getElementById('aiModalStatusPill').innerHTML = '<span style="width: 5px; height: 5px; background: #38bdf8; border-radius: 50%;"></span> QUÉT LASER AI ĐANG CHẠY';
+      
+      const btn = document.getElementById('aiScanBtn');
+      btn.style.background = '#475569';
+      btn.disabled = true;
+
+      // Speak audio guidance
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance('Vui lòng giữ yên camera cách vị trí thương tổn 20 đến 30 cen ti mét để AI phân tích.');
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+      }
+
+      let count = 2;
+      btn.innerHTML = '<span>⏳</span> ĐANG QUÉT (GIỮ YÊN ' + count + 's)...';
+      document.getElementById('aiModalGuideText').textContent = 'ĐANG PHÂN TÍCH VẾT THƯƠNG (' + count + 's)...';
+
+      aiCountdownTimer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          btn.innerHTML = '<span>⏳</span> ĐANG QUÉT (GIỮ YÊN ' + count + 's)...';
+          document.getElementById('aiModalGuideText').textContent = 'ĐANG PHÂN TÍCH VẾT THƯƠNG (' + count + 's)...';
+        } else {
+          clearInterval(aiCountdownTimer);
+          isAiScanning = false;
+          document.getElementById('aiLaserLine').style.display = 'none';
+          document.getElementById('aiModalStatusPill').innerHTML = '<span style="width: 5px; height: 5px; background: #22c55e; border-radius: 50%;"></span> CHẨN ĐOÁN HOÀN TẤT (98.2%)';
+          document.getElementById('aiModalGuideText').textContent = 'PHÂN TÍCH THỊ GIÁC AI HOÀN TẤT!';
+          btn.innerHTML = '<span>🔄</span> QUÉT LẠI VỊ TRÍ KHÁC';
+          btn.style.background = '#0284c7';
+          btn.disabled = false;
+          showToast('✅ AI đã nhận diện: ' + currentAiKnowledge.title);
+        }
+      }, 1000);
+    }
+
+    function speakAiDiag() {
+      if (!currentAiKnowledge) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const text = currentAiKnowledge.title + '. ' + currentAiKnowledge.why + '. Hành động khẩn cấp: ' + currentAiKnowledge.action;
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+        showToast('🔊 Đang đọc giải thích y khoa...');
+      }
+    }
+
+    function renderAiFaqs(faqs) {
+      const container = document.getElementById('aiFaqContainer');
+      container.innerHTML = '';
+      faqs.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'faq-accordion' + (idx === 0 ? ' open' : '');
+        div.onclick = (e) => {
+          if (e.target.tagName.toLowerCase() === 'button') return;
+          div.classList.toggle('open');
+        };
+        div.innerHTML = `
+          <div class="faq-accordion-header">
+            <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 11px; font-weight: 800; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">${idx + 1}</span>
+            <div style="flex: 1; font-size: 12px; font-weight: 700; color: white;">${item.q}</div>
+            <button onclick="speakFaq(${idx}); event.stopPropagation();" style="background: transparent; border: none; color: #94a3b8; font-size: 15px; cursor: pointer;">🔊</button>
+          </div>
+          <div class="faq-accordion-body">${item.a}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function speakFaq(idx) {
+      if (!currentAiKnowledge || !currentAiKnowledge.faqs[idx]) return;
+      const item = currentAiKnowledge.faqs[idx];
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(item.q + '. ' + item.a);
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+        showToast('🔊 Đang đọc giải đáp...');
+      }
+    }
+
+    function askAiQuestion() {
+      const input = document.getElementById('aiCustomQueryInput');
+      const query = input.value.trim().toLowerCase();
+      if (!query) return;
+
+      let answer = '';
+      if (query.includes('đá') || query.includes('lạnh')) {
+        answer = 'KHÔNG ĐƯỢC DÙNG ĐÁ LẠNH! Nhiệt độ âm của đá gây co thắt mao mạch đột ngột, làm giảm tưới máu và gây hoại tử mô thứ phát (bỏng lạnh). Chỉ dùng nước sạch nhiệt độ phòng 15-20°C.';
+      } else if (query.includes('kem đánh răng') || query.includes('nước mắm') || query.includes('mỡ')) {
+        answer = 'TUYỆT ĐỐI CẤM! Bôi kem đánh răng, nước mắm hoặc mỡ trăn làm giữ nhiệt trong vết thương, tăng nguy cơ nhiễm trùng máu nghiêm trọng và khiến bác sĩ phải cạo rửa vô cùng đau đớn.';
+      } else if (query.includes('tỉnh') || query.includes('ổn')) {
+        answer = 'Dù nạn nhân đã tỉnh lại (nhất là sau điện giật, đuối nước hoặc hóc dị vật), vẫn BẮT BUỘC phải đưa tới bệnh viện để theo dõi nguy cơ rối loạn nhịp tim muộn, phù phổi cấp hoặc tổn thương nội tạng.';
+      } else if (query.includes('trẻ') || query.includes('sơ sinh') || query.includes('nhỏ')) {
+        answer = 'Với trẻ dưới 1 tuổi: TUYỆT ĐỐI KHÔNG ép bụng kiểu Heimlich người lớn (nguy cơ vỡ gan/lá lách). Đặt trẻ nằm sấp nghiêng trên cẳng tay, vỗ 5 lần vào lưng giữa 2 bả vai, lật ngửa ấn 5 lần vào xương ức bằng 2 ngón tay.';
+      } else if (query.includes('rút') || query.includes('vật nhọn') || query.includes('cắm')) {
+        answer = 'KHÔNG ĐƯỢC RÚT DỊ VẬT RA! Dị vật đang đóng vai trò nút chặn cầm máu tạm thời. Rút ra sẽ gây mất máu ồ ạt trong vài phút. Hãy dùng băng gạc chèn cố định quanh dị vật và đưa cấp cứu ngay.';
+      } else {
+        answer = 'Theo khuyến nghị y khoa AHA và Bộ Y tế: Ưu tiên bảo đảm an toàn hiện trường, đánh giá tri giác và đường thở. Nếu có bất kỳ dấu hiệu mất ý thức hoặc khó thở, hãy gọi 115 ngay lập tức.';
+      }
+
+      document.getElementById('aiCustomAnswerText').textContent = answer;
+      document.getElementById('aiCustomAnswerBox').style.display = 'block';
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(answer);
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function speakCustomAiAnswer() {
+      const text = document.getElementById('aiCustomAnswerText').textContent;
+      if (!text) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    // ==========================================
+    // 2-WAY HANDS-FREE VOICE DIALOGUE ENGINE
+    // ==========================================
+    let isVoiceListening = false;
+    let webSpeechRecognition = null;
+    let activeVoiceContext = 'cpr'; // 'cpr' or 'modal'
+
+    function initWebSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        console.warn('SpeechRecognition API not supported in this browser.');
+        return null;
+      }
+      const rec = new SpeechRecognition();
+      rec.continuous = false;
+      rec.interimResults = false;
+      rec.lang = 'vi-VN';
+
+      rec.onstart = function() {
+        isVoiceListening = true;
+        updateVoiceUiState('listening');
+      };
+
+      rec.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        processSpokenQuery(transcript, activeVoiceContext);
+      };
+
+      rec.onerror = function(event) {
+        console.log('STT Error:', event.error);
+        isVoiceListening = false;
+        updateVoiceUiState('idle');
+      };
+
+      rec.onend = function() {
+        isVoiceListening = false;
+        updateVoiceUiState('idle');
+      };
+
+      return rec;
+    }
+
+    function toggleWebVoiceDialogue(context) {
+      activeVoiceContext = context;
+      if (!webSpeechRecognition) {
+        webSpeechRecognition = initWebSpeechRecognition();
+      }
+
+      if (!webSpeechRecognition) {
+        showToast('🎙️ Chạm các câu hỏi mẫu để nói chuyện với AI không cần gõ!');
+        return;
+      }
+
+      if (isVoiceListening) {
+        webSpeechRecognition.stop();
+        isVoiceListening = false;
+        updateVoiceUiState('idle');
+      } else {
+        try {
+          webSpeechRecognition.start();
+          showToast('🎙️ Đang lắng nghe giọng nói tiếng Việt... Hãy nói câu hỏi của bạn!');
+        } catch(e) {
+          console.error(e);
+        }
+      }
+    }
+
+    function updateVoiceUiState(state) {
+      const cprOrb = document.getElementById('cprVoiceOrb');
+      const cprBtn = document.getElementById('cprVoiceBtn');
+      const cprStatus = document.getElementById('cprVoiceStatus');
+      const cprSub = document.getElementById('cprVoiceSub');
+
+      const modalOrb = document.getElementById('modalVoiceOrb');
+      const modalTitle = document.getElementById('modalVoiceTitle');
+      const modalSub = document.getElementById('modalVoiceSub');
+      const modalDot = document.getElementById('aiVoiceDot');
+
+      if (state === 'listening') {
+        if (cprOrb) {
+          cprOrb.className = 'voice-mic-orb listening';
+          cprBtn.textContent = 'DỪNG LẮNG NGHE';
+          cprBtn.style.background = '#dc2626';
+          cprStatus.textContent = 'ĐANG LẮNG NGHE BẠN NÓI...';
+          cprSub.textContent = 'Hãy nói: "Mỏi tay", "Nạn nhân có mạch", "Tư thế đúng chưa"...';
+        }
+        if (modalOrb) {
+          modalOrb.className = 'voice-mic-orb listening';
+          modalTitle.textContent = 'AI đang lắng nghe bạn nói...';
+          modalSub.textContent = 'Hệ thống đang thu âm giọng nói tiếng Việt...';
+          modalDot.style.background = '#ef4444';
+        }
+      } else if (state === 'speaking') {
+        if (cprOrb) {
+          cprOrb.className = 'voice-mic-orb speaking';
+          cprBtn.textContent = 'AI ĐANG NÓI';
+          cprBtn.style.background = '#16a34a';
+          cprStatus.textContent = 'AI ĐANG TRẢ LỜI QUA LOA...';
+        }
+        if (modalOrb) {
+          modalOrb.className = 'voice-mic-orb speaking';
+          modalTitle.textContent = 'AI đang trả lời qua loa ngoài...';
+          modalSub.textContent = 'Lắng nghe phản hồi y tế...';
+          modalDot.style.background = '#22c55e';
+        }
+      } else {
+        if (cprOrb) {
+          cprOrb.className = 'voice-mic-orb';
+          cprBtn.textContent = 'MỞ MIC';
+          cprBtn.style.background = '#0284c7';
+          cprStatus.textContent = 'ĐỐI THOẠI RẢNH TAY 2 CHIỀU';
+          cprSub.textContent = 'Chạm mic hoặc nói to trực tiếp không cần gõ';
+        }
+        if (modalOrb) {
+          modalOrb.className = 'voice-mic-orb';
+          modalTitle.textContent = 'Chạm mic để nói chuyện trực tiếp';
+          modalSub.textContent = 'Hệ thống tự động nghe và phát âm thanh trả lời';
+          modalDot.style.background = '#38bdf8';
+        }
+      }
+    }
+
+    function resolveMedicalVoiceQuery(raw) {
+      const q = raw.toLowerCase().trim();
+
+      // CPR
+      if (q.includes('mỏi') || q.includes('mệt') || q.includes('đuối')) {
+        return 'Đổi người ép tim ngay lập tức dưới 5 giây! Nếu chỉ có một mình, hãy khóa thẳng 2 khuỷu tay 180 độ và dùng toàn bộ sức nặng nửa thân trên dồn xuống để không tốn sức bắp tay.';
+      }
+      if (q.includes('tỉnh') || q.includes('thở lại') || q.includes('có mạch') || q.includes('cử động')) {
+        return 'Tuyệt vời! Dừng ép tim ngay lập tức. Đặt nạn nhân nằm nghiêng an toàn ở tư thế hồi phục để chống sặc nôn và tiếp tục theo dõi nhịp thở sát sao.';
+      }
+      if (q.includes('độ sâu') || q.includes('sâu bao nhiêu') || q.includes('sâu mấy')) {
+        return 'Ép sâu từ 5 đến 6 xăng ti mét đối với người lớn. Đảm bảo lồng ngực nở lại hoàn toàn sau mỗi lần ấn trước khi ép nhịp tiếp theo.';
+      }
+      if (q.includes('aed') || q.includes('máy sốc điện') || q.includes('sốc tim')) {
+        return 'Bật nguồn máy AED ngay lập tức! Tiếp tục ép tim cho đến khi máy dán xong hai miếng điện cực và báo dừng lại để phân tích nhịp tim.';
+      }
+      if (q.includes('nhịp tim') || q.includes('tốc độ')) {
+        return 'Duy trì tốc độ 100 đến 120 nhịp mỗi phút. Hãy bám sát tiếng bíp nhịp điệu 110 BPM và rung phản hồi của ứng dụng.';
+      }
+
+      // Posture
+      if (q.includes('tư thế') || q.includes('tay thẳng') || q.includes('khuỷu tay') || q.includes('góc')) {
+        return 'Khuỷu tay cần khóa thẳng tuyệt đối 180 độ, không gập tay. Hai vai phải vuông góc 90 độ ngay trên xương ức nạn nhân để dồn trọng lượng từ vai xuống.';
+      }
+      if (q.includes('quỳ') || q.includes('đầu gối')) {
+        return 'Quỳ sát cạnh hông ngực nạn nhân, hai đầu gối mở rộng bằng vai để tạo thế trụ vững chắc nhất khi dồn lực ấn lồng ngực.';
+      }
+
+      // Burns & Wounds
+      if (q.includes('kem đánh răng') || q.includes('mỡ trăn') || q.includes('nước mắm') || q.includes('trứng gà')) {
+        return 'Cấm tuyệt đối bôi kem đánh răng, mỡ trăn hay trứng gà! Các chất này giữ nhiệt dưới lớp mô bị tổn thương và là nguồn gây nhiễm trùng huyết cực kỳ nguy hiểm.';
+      }
+      if (q.includes('đá lạnh') || q.includes('chườm đá') || q.includes('áp đá') || q.includes('cục đá')) {
+        return 'Tuyệt đối KHÔNG chườm đá lạnh trực tiếp lên vết thương! Đá lạnh gây co thắt mao mạch đột ngột và hoại tử bỏng lạnh mô hạt. Hãy xối nước sạch mát liên tục từ 15 đến 20 phút.';
+      }
+      if (q.includes('bọng nước') || q.includes('chọc') || q.includes('phồng rộp')) {
+        return 'Tuyệt đối không chọc vỡ các bọng nước! Vỏ bọng nước là lớp màng sinh học tự nhiên vô trùng bảo vệ cơ thể khỏi vi khuẩn. Băng hờ bằng gạc sạch vô trùng.';
+      }
+      if (q.includes('giật điện') || q.includes('điện giật') || q.includes('điểm ra')) {
+        return 'Ngắt nguồn điện an toàn trước khi chạm vào nạn nhân! Luôn kiểm tra cả điểm điện vào và điểm điện ra. Nguy cơ lớn nhất là ngừng tim rung thất, chuẩn bị ép tim nếu nạn nhân ngưng thở.';
+      }
+      if (q.includes('chảy máu') || q.includes('cầm máu')) {
+        return 'Ấn chặt gạc sạch trực tiếp lên miệng vết thương ngay lập tức! Giữ liên tục tối thiểu 10 phút, không dỡ gạc ra xem giữa chừng.';
+      }
+      if (q.includes('đuối nước') || q.includes('xóc nước') || q.includes('vác dốc')) {
+        return 'Tuyệt đối không vác dốc ngược nạn nhân chạy xóc nước! Điều này làm dịch dạ dày trào ngược tắc nghẽn đường thở. Ép tim và thổi ngạt ngay nếu không thở.';
+      }
+
+      return 'Trợ lý AI đã ghi nhận. Hãy tiếp tục sơ cứu theo hướng dẫn trên màn hình. Bạn có thể nói: Nạn nhân tỉnh lại, mỏi tay, hoặc hỏi cách xử trí.';
+    }
+
+    function processSpokenQuery(queryText, context) {
+      if (!queryText || !queryText.trim()) return;
+
+      const answer = resolveMedicalVoiceQuery(queryText);
+
+      if (context === 'cpr') {
+        const box = document.getElementById('cprVoiceTranscriptBox');
+        const userT = document.getElementById('cprUserTranscript');
+        const aiT = document.getElementById('cprAiTranscript');
+        if (box && userT && aiT) {
+          box.style.display = 'block';
+          userT.textContent = 'Bạn: "' + queryText + '"';
+          aiT.textContent = 'Bác sĩ AI: ' + answer;
+        }
+      } else {
+        const box = document.getElementById('modalVoiceTranscriptBox');
+        const userT = document.getElementById('modalUserTranscript');
+        const aiT = document.getElementById('modalAiTranscript');
+        if (box && userT && aiT) {
+          box.style.display = 'block';
+          userT.textContent = 'Bạn nói: "' + queryText + '"';
+          aiT.textContent = 'Bác sĩ AI ResQ-Aid: ' + answer;
+        }
+      }
+
+      // Voice output
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        updateVoiceUiState('speaking');
+        const utter = new SpeechSynthesisUtterance(answer);
+        utter.lang = 'vi-VN';
+        utter.rate = 1.0;
+        utter.onend = function() {
+          updateVoiceUiState('idle');
+        };
+        utter.onerror = function() {
+          updateVoiceUiState('idle');
+        };
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function simulateVoiceQuery(queryText, context) {
+      processSpokenQuery(queryText, context);
+      showToast('🗣️ Lệnh thoại: "' + queryText + '"');
+    }
+
+    // Initial render
+    renderProtocols();
+  </script>
+</body>
+</html>

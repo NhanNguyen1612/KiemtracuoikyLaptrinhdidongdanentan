@@ -1,0 +1,455 @@
+[
+  {
+    "id": "cpr_main",
+    "topic": "cpr",
+    "urgency": 0,
+    "comorbidRank": 1,
+    "initial": "Kiểm tra ngay: Nạn nhân có lay gọi tỉnh không và lồng ngực có phập phồng thở không? Nếu bất tỉnh và ngưng thở: Hãy gọi to nhờ người gọi 115 và tìm máy sốc điện AED, đồng thời bắt đầu ép tim ngay theo nhịp 110 BPM trên app! Bạn có cần tôi hướng dẫn tư thế đặt tay chi tiết không?",
+    "detailed": "Kỹ thuật ép tim CPR 110 BPM chuẩn AHA: 1. Vị trí: Đặt gót một bàn tay vào chính giữa 1/2 dưới xương ức nạn nhân, đan bàn tay kia lên trên. 2. Tư thế: Quỳ sát cạnh hông ngực nạn nhân, khóa thẳng tuyệt đối 180 độ hai khuỷu tay, cánh tay vuông góc 90 độ với lồng ngực. 3. Động tác: Dùng trọng lượng nửa thân trên dập mạnh xuống ngực sâu từ 5 đến 6 xăng ti mét, để ngực nở hoàn toàn sau mỗi lần ép. 4. Tốc độ: Nhịp độ chuẩn xác 110 BPM (100-120 lần/phút)."
+  },
+  {
+    "id": "cpr_rosc",
+    "topic": "cpr",
+    "urgency": 1,
+    "initial": "Tuyệt vời! Dừng ép tim ngay lập tức! Đặt nạn nhân sang tư thế nằm nghiêng an toàn (tư thế hồi phục) để tránh tụt lưỡi hoặc hít sặc dịch nôn. Tiếp tục theo dõi nhịp thở đều đặn và chờ cấp cứu 115 đến.",
+    "detailed": "Khi nạn nhân có mạch và tự thở lại: Dừng ép tim ngay, xoay người sang tư thế hồi phục nằm nghiêng an toàn, kiểm tra nhịp thở mỗi 2 phút và giữ ấm chờ xe 115."
+  },
+  {
+    "id": "cpr_fatigue",
+    "topic": "cpr",
+    "urgency": 1,
+    "initial": "Đổi người ép tim ngay! Người hỗ trợ vào vị trí sẵn sàng, chuyển giao trong dưới 5 giây. Nếu chỉ có một mình: Hãy khóa thẳng 2 khuỷu tay 180 độ, dùng trọng lượng toàn bộ thân trên nhấp xuống thay vì dùng sức cơ bắp tay để đỡ kiệt sức!",
+    "detailed": "Mỗi 2 phút (khoảng 5 chu kỳ 30:2) nên Đổi người ép tim trong dưới 5 giây. Luôn khóa thẳng 2 khuỷu tay 180 độ dùng trọng lực thân trên để duy trì độ sâu 5-6cm."
+  },
+  {
+    "id": "cpr_depth",
+    "topic": "cpr",
+    "urgency": 1,
+    "initial": "Độ sâu ép tim chuẩn là 5 đến 6 xăng ti mét đối với người lớn (khoảng 1/3 bề dày lồng ngực). Hãy ép mạnh, dứt khoát và để ngực nở hoàn toàn sau mỗi lần ép!",
+    "detailed": "Theo khuyến cáo AHA 2025: Độ sâu ép tim người lớn đạt từ 5 đến 6 xăng ti mét, không ép quá 6cm và phải để lồng ngực đàn hồi nở lại hoàn toàn."
+  },
+  {
+    "id": "cpr_rate",
+    "topic": "cpr",
+    "urgency": 1,
+    "initial": "Tốc độ ép tim chuẩn là 110 BPM (từ 100 đến 120 lần một phút). Bạn hãy bấm nút Ép Tim CPR 110 BPM trên màn hình để nghe tiếng Metronome đếm nhịp chuẩn xác!",
+    "detailed": "Duy trì tần số ép tim liên tục 100-120 lần/phút (tối ưu 110 BPM), hạn chế tối đa thời gian ngưng ép dưới 10 giây."
+  },
+  {
+    "id": "cpr_aed",
+    "topic": "cpr",
+    "urgency": 0,
+    "initial": "Bật nguồn máy AED ngay lập tức! Máy sẽ phát giọng nói hướng dẫn: Hãy lau khô ngực nạn nhân, bóc và dán 2 bản cực theo hình vẽ (1 bản cực dưới xương đòn phải, 1 bản cực dưới nách mạng sườn trái). Đứng lùi xa khi máy phân tích nhịp tim và bấm nút sốc nếu có chỉ định!",
+    "detailed": "Sử dụng máy sốc điện tự động AED: Bật nguồn máy AED ngay, dán 2 bản cực đúng vị trí, hô to mọi người tránh xa khi máy phân tích nhịp và phóng điện, sau khi sốc tiếp tục ép tim 110 BPM ngay!"
+  },
+  {
+    "id": "cpr_posture",
+    "topic": "cpr",
+    "urgency": 1,
+    "initial": "Tư thế ép tim chuẩn: Quỳ sát cạnh hông ngực nạn nhân. Đặt gót một bàn tay vào 1/2 dưới xương ức, đan bàn tay kia lên trên, khóa thẳng tuyệt đối 180 độ hai khuỷu tay (khóa thẳng 2 khuỷu tay 180 độ), cánh tay vuông góc 90 độ với lồng ngực. Dùng trọng lượng nửa thân trên dập xuống!",
+    "detailed": "Quỳ sát cạnh hông ngực nạn nhân trên nền phẳng cứng, đặt gót bàn tay ở nửa dưới xương ức, khóa thẳng tuyệt đối 180 độ hai khuỷu tay sao cho vai-khuỷu-cổ tay tạo trục vuông góc 90 độ."
+  },
+  {
+    "id": "choking_adult",
+    "topic": "choking",
+    "urgency": 0,
+    "comorbidRank": 2,
+    "initial": "Nạn nhân còn ho to hoặc nói được không? Nếu còn ho được: Hãy khuyến khích họ ho thật mạnh, KHÔNG can thiệp vỗ lưng vội. Nếu nạn nhân ôm cổ tím tái, không nói được: Cần làm ngay 5 cú vỗ lưng kết hợp 5 lần ép bụng Heimlich! Bạn có cần tôi hướng dẫn cách làm chi tiết từng bước không?",
+    "detailed": "Kỹ thuật chi tiết từng bước cho người lớn: Bước 1 - Vỗ lưng: Đứng hơi chếch phía sau, đỡ ngực cho nạn nhân cúi gập người, dùng gót bàn tay vỗ dứt khoát 5 lần vào giữa hai xương bả vai. Bước 2 - Thủ thuật Heimlich: Đứng phía sau ôm ngang bụng, nắm đấm đặt ngay trên rốn và dưới mũi ức, giật mạnh VÀO TRONG và LÊN TRÊN 5 lần liên tục cho đến khi dị vật bật ra!"
+  },
+  {
+    "id": "infant_choking_milk",
+    "topic": "infantChokingMilk",
+    "urgency": 0,
+    "initial": "Cấp cứu trẻ sơ sinh SẶC SỮA / hóc dị vật dưới 1 tuổi: 1. Đặt bé nằm sấp dọc theo cẳng tay bạn, đầu dốc thấp hơn ngực, dùng gót bàn tay vỗ lưng mạnh 5 lần giữa 2 xương bả vai. 2. Lật ngửa bé, dùng 2 ngón tay ấn ngực 5 lần vào 1/2 dưới xương ức. Tuyệt đối CẤM ép bụng Heimlich ở trẻ sơ sinh!",
+    "detailed": "Hướng dẫn chi tiết cho trẻ sơ sinh dưới 1 tuổi: 1. Đặt bé nằm sấp dốc đầu dọc cẳng tay bạn, tay giữ nhẹ cằm, dùng gót bàn tay vỗ lưng 5 lần giữa 2 bả vai. 2. Lật ngửa bé trên cẳng tay kia, dùng 2 ngón tay ấn 5 lần vào giữa xương ức. Tuyệt đối CẤM ép bụng Heimlich ở trẻ nhỏ để tránh vỡ gan hoặc lách!"
+  },
+  {
+    "id": "choking_fishbone",
+    "topic": "chokingFishBone",
+    "urgency": 2,
+    "initial": "Sơ cứu hóc xương cá: TUYỆT ĐỐI CẤM nuốt cục cơm nguội lớn, chuối hoặc vỏ cam vì sẽ đẩy xương cắm sâu thủng thực quản! Hãy ngừng nuốt, há miệng soi đèn kiểm tra và đến chuyên khoa Tai - Mũi - Họng để bác sĩ gắp an toàn.",
+    "detailed": "Khi bị hóc xương cá ở cổ: CẤM nuốt cục cơm nguội hay móc họng thô bạo. Hãy khạc nhẹ, nếu xương không ra cần đến phòng khám Tai - Mũi - Họng nội soi gắp xương."
+  },
+  {
+    "id": "burn_main",
+    "topic": "burn",
+    "urgency": 2,
+    "comorbidRank": 5,
+    "initial": "Hãy xả ngay vết bỏng dưới vòi nước mát sạch chảy nhẹ trong 15 đến 20 phút liên tục! CẤM chườm đá lạnh trực tiếp và CẤM bôi kem đánh răng hay mỡ trăn. Bạn có thể bấm nút Quét Camera để tôi phân loại bỏng độ mấy ngay lập tức!",
+    "detailed": "Quy trình sơ cứu bỏng chuẩn Viện Bỏng Quốc gia: 1. Xối nước mát sạch (16-20°C) liên tục 15 đến 20 phút. 2. Tháo sớm nhẫn, vòng tay trước khi nề. 3. Che phủ bằng gạc vô trùng ẩm. 4. Cấm bôi kem đánh răng, mỡ trăn, nước mắm. 5. Bấm Quét Camera Vết Thương để đánh giá độ bỏng!"
+  },
+  {
+    "id": "burn_ice_contraindication",
+    "topic": "burn",
+    "urgency": 2,
+    "initial": "Tuyệt đối KHÔNG chườm đá lạnh trực tiếp lên vết bỏng! Đá lạnh làm co mạch đột ngột gây bỏng lạnh chồng lên bỏng nhiệt và hoại tử sâu hơn. Chỉ dùng nước máy mát xả nhẹ trong 15 đến 20 phút (không chườm đá lạnh)!",
+    "detailed": "Chườm đá lạnh trực tiếp lên mô bỏng gây co thắt vi mạch cấp tính dẫn đến thiếu máu hoại tử mô. Luôn xả dưới vòi nước mát thường 15 đến 20 phút."
+  },
+  {
+    "id": "burn_toothpaste_contraindication",
+    "topic": "burn",
+    "urgency": 2,
+    "initial": "Cấm tuyệt đối bôi kem đánh răng hay mỡ trăn, nước mắm lên vết bỏng! Các chất này giữ nhiệt âm ỉ trong mô, gây nhiễm trùng nặng và làm bác sĩ rất khó làm sạch tổn thương.",
+    "detailed": "Cấm tuyệt đối bôi kem đánh răng, mỡ trăn, lòng trắng trứng hay nước mắm lên vết bỏng hở. Chỉ xả nước mát sạch 15-20 phút và che gạc vô khuẩn."
+  },
+  {
+    "id": "burn_blister",
+    "topic": "burn",
+    "urgency": 2,
+    "initial": "Tuyệt đối không chọc vỡ các bọng nước phồng rộp! Lớp màng bọng nước là gạc sinh học vô trùng tự nhiên bảo vệ lớp biểu bì non bên dưới khỏi vi khuẩn xâm nhập.",
+    "detailed": "Giữ nguyên bọng nước bỏng, không chọc vỡ. Che nhẹ bằng gạc vô trùng không dính; nếu tự vỡ hãy rửa nước muối sinh lý 0.9%."
+  },
+  {
+    "id": "drowning_main",
+    "topic": "drowning",
+    "urgency": 0,
+    "comorbidRank": 2,
+    "initial": "Đưa nạn nhân lên bờ khô ráo ngay! Kiểm tra miệng lấy sạch bùn rêu. Nếu nạn nhân ngừng thở, hãy thổi ngạt ngay 5 nhịp đầu tiên để cung cấp oxy, sau đó phối hợp chu kỳ 30 lần ép tim và 2 lần thổi ngạt liên tục (hô hấp nhân tạo). Tuyệt đối KHÔNG vác dốc ngược chạy xóc nước!",
+    "detailed": "Quy trình cấp cứu đuối nước: 1. Đặt nằm ngửa bờ phẳng, móc dị vật miệng. 2. Thổi ngạt 5 hơi đầu tiên. 3. Ép tim ngoài lồng ngực 30 lần (110 BPM) xen kẽ 2 lần thổi ngạt liên tục tới khi thở lại hoặc xe 115 đến."
+  },
+  {
+    "id": "drowning_upside_down",
+    "topic": "drowning",
+    "urgency": 0,
+    "initial": "Tuyệt đối CẤM vác dốc ngược (không vác dốc ngược) nạn nhân chạy quanh để xóc nước! Việc này làm mất thời gian vàng cấp cứu ngừng tuần hoàn và gây trào ngược dịch dạ dày vào phổi. Hãy đặt nằm ngửa thổi ngạt 5 hơi và ép tim ngay!",
+    "detailed": "Không vác dốc ngược xóc nước vì nước trong phổi không chảy ra bằng cách dốc ngược mà làm não thiếu oxy không hồi phục."
+  },
+  {
+    "id": "electric_shock_main",
+    "topic": "electricShock",
+    "urgency": 0,
+    "comorbidRank": 2,
+    "initial": "CỰC KỲ NGUY HIỂM! Ngắt nguồn điện / cắt ngay cầu dao điện hoặc dùng cây gỗ khô gạt dây điện ra, TUYỆT ĐỐI KHÔNG chạm tay trần vào nạn nhân khi còn điện! Sau khi tách điện an toàn, nếu ngừng thở hãy ép tim CPR 110 BPM ngay và băng cả điểm dòng điện vào và điểm dòng điện đi ra!",
+    "detailed": "Quy trình cứu điện giật: 1. Ngắt nguồn điện hoặc dùng vật cách điện khô tách nạn nhân. 2. Kiểm tra thở và mạch 10 giây, ép tim CPR 110 BPM ngay nếu ngừng tim. 3. Kiểm tra và băng vô trùng cả điểm dòng điện vào và điểm dòng điện đi ra."
+  },
+  {
+    "id": "bleeding_cut",
+    "topic": "bleedingCut",
+    "urgency": 2,
+    "comorbidRank": 5,
+    "initial": "Bạn bình tĩnh nhé! Hãy lấy ngay miếng gạc sạch hoặc vải sạch ấn chặt trực tiếp lên miệng vết đứt để cầm máu liên tục 5-10 phút và nâng cao tay (hoặc kê cao chân nếu ở chân) cao hơn tim. Bạn hãy bấm nút Quét Camera bên dưới để tôi đánh giá độ sâu vết thương xem có cần khâu y tế không nhé!",
+    "detailed": "Quy trình xử lý vết rách chảy máu: 1. Cầm máu: Dùng gạc sạch ấn chặt trực tiếp 5-10 phút không mở ra xem sớm. 2. Nâng cao tay / kê cao chi bị thương trên mức tim. 3. Rửa nước muối sinh lý 0.9%, KHÔNG đổ cồn 90 độ hay oxy già thẳng vào mô sâu. 4. Bấm Quét Camera để kiểm tra mép vết thương!",
+    "legVariant": "Bạn bình tĩnh nhé! Hãy dùng gạc sạch ấn chặt trực tiếp lên vết rách ở chân 5-10 phút để cầm máu và kê cao chân lên gối mềm cao hơn mức tim, hạn chế đi lại. Hãy mở Quét Camera để đánh giá độ sâu vết thương!"
+  },
+  {
+    "id": "arterial_bleeding",
+    "topic": "arterialBleeding",
+    "urgency": 0,
+    "comorbidRank": 1,
+    "initial": "NGUY CẤP! CHẢY MÁU ĐỘNG MẠCH PHUN THÀNH TIA: 1. Dùng gạc/khăn cuộn ấn thật chặt trực tiếp bằng toàn bộ lực tay lên miệng vết thương. 2. Nếu máu ở chi vẫn phun xối xả đe dọa tính mạng, đặt garo cách trên vết thương 5cm về phía tim và ghi rõ giờ đặt garo. 3. Gọi ngay 115!",
+    "detailed": "Xử trí đứt động mạch: Ép chặt trực tiếp không buông tay, đặt nạn nhân nằm đầu thấp phòng sốc mất máu, thắt garo đúng chỉ định trên vết thương 5cm và gọi 115 tối khẩn."
+  },
+  {
+    "id": "tetanus_rusty",
+    "topic": "tetanusRisk",
+    "urgency": 1,
+    "comorbidRank": 3,
+    "initial": "CẢNH BÁO NGUY CƠ UỐN VÁN CAO! 1. Dùng gạc sạch ấn cầm máu 5-10 phút và nâng cao chi bị thương. 2. Xối rửa thật kỹ dưới vòi nước sạch với xà phòng để loại bỏ hết gỉ sắt và đất bẩn, sát khuẩn bằng Povidone-Iodine, không băng bịt quá kín. 3. Đưa đến cơ sở y tế trong 24 giờ để tiêm phòng vắc-xin uốn ván và huyết thanh kháng độc tố SAT!",
+    "legVariant": "CẢNH BÁO NGUY CƠ UỐN VÁN Ở CHÂN! 1. Dùng gạc sạch ấn cầm máu 5-10 phút, nằm nghỉ và kê cao chân lên gối mềm cao hơn tim (không đi lại dồn lực). 2. Xối rửa kỹ vết thương ở chân dưới vòi nước sạch để loại bỏ gỉ sắt và đất cát, sát khuẩn Povidone-Iodine. 3. Đến cơ sở y tế trong vòng 24 giờ để tiêm phòng uốn ván và huyết thanh SAT!",
+    "detailed": "Phác đồ dự phòng uốn ván: Rửa sạch dị vật gỉ sắt dưới vòi nước chảy, để vết thương thoáng khí chống vi khuẩn kỵ khí Clostridium tetani, và đến trạm y tế/bệnh viện trong 24 giờ tiêm SAT + vắc-xin uốn ván."
+  },
+  {
+    "id": "dog_cat_bite",
+    "topic": "dogCatBite",
+    "urgency": 1,
+    "comorbidRank": 2,
+    "initial": "XỬ TRÍ CHÓ CẮN / ĐỘNG VẬT CẮN PHÒNG BỆNH DẠI: 1. Xối rửa ngay vết thương dưới vòi nước chảy mạnh với xà phòng liên tục tối thiểu 15 phút. 2. Sát khuẩn bằng cồn 70 độ hoặc Povidone-Iodine, KHÔNG băng kín hay khâu kín ngay. 3. Đến bệnh viện / trung tâm tiêm chủng tiêm vắc-xin phòng dại và huyết thanh kháng dại ngay lập tức!",
+    "detailed": "Bệnh dại khi đã lên cơn có tỷ lệ tử vong 100%: Bắt buộc rửa vết CHÓ CẮN dưới vòi nước xà phòng 15 phút, sát khuẩn và đi tiêm phòng dại tại bệnh viện ngay, đồng thời theo dõi con vật 10-14 ngày."
+  },
+  {
+    "id": "fracture_main",
+    "topic": "fracture",
+    "urgency": 1,
+    "comorbidRank": 3,
+    "initial": "CẢNH BÁO GÃY XƯƠNG / BIẾN DẠNG CHI: Giữ nạn nhân nằm yên, BẤT ĐỘNG HOÀN TOÀN chi gãy ở nguyên tư thế hiện tại bằng nẹp cứng qua 2 khớp trên và dưới ổ gãy! Tuyệt đối KHÔNG tự ý kéo nắn bẻ thẳng xương. Gọi 115 hoặc đưa đi chụp X-quang!",
+    "detailed": "Kỹ thuật cố định gãy xương: 1. BẤT ĐỘNG nguyên trạng, không ấn đầu xương gãy hở vào trong. 2. Đặt nẹp cứng có lót gạc mềm cố định trên và dưới ổ gãy qua 2 khớp liền kề. 3. Chườm lạnh ngoài nẹp và chuyển viện."
+  },
+  {
+    "id": "sprain_rice",
+    "topic": "sprain",
+    "urgency": 3,
+    "initial": "Sơ cứu bong gân / trẹo khớp theo quy tắc R.I.C.E: 1. Rest (Nghỉ vận động). 2. Ice (Chườm đá bọc khăn 15-20 phút, CẤM xoa dầu nóng hay mật gấu trong 48h đầu). 3. Compression (Băng thun ép nhẹ). 4. Elevation (Kê cao chân hơn mức tim).",
+    "detailed": "Áp dụng chuẩn R.I.C.E trong 48 giờ đầu cho bong gân: Nghỉ ngơi, Chườm đá lạnh qua khăn, Băng ép thun vừa phải và Kê cao chi để giảm sưng phù."
+  },
+  {
+    "id": "abrasion_minor",
+    "topic": "bleedingCut",
+    "urgency": 3,
+    "initial": "Với vết va chạm trầy xước nhẹ ngoài da (không chảy máu ồ ạt): 1. Rửa sạch bụi bẩn bằng nước muối sinh lý NaCl 0.9% và xà phòng dịu nhẹ. 2. Thấm khô bằng gạc vô trùng, sát khuẩn nhẹ quanh mép và che băng thông thoáng. 3. Chườm mát nếu có sưng nề nhẹ và theo dõi dấu hiệu nhiễm trùng.",
+    "detailed": "Chăm sóc trầy xước nông tại nhà: Rửa nước muối sinh lý 0.9%, giữ sạch thoáng, không đắp lá cây hay bột kháng sinh."
+  },
+  {
+    "id": "heart_attack_acute",
+    "topic": "heartAttack",
+    "urgency": 0,
+    "comorbidRank": 1,
+    "initial": "🚨 BÁO ĐỘNG ĐỎ CẤP CỨU: Nghi ngờ cơn nhồi máu cơ tim cấp! 1. GỌI NGAY 115 KHẨN CẤP. 2. Dừng mọi vận động, đặt bệnh nhân ngồi tựa lưng nửa nằm nửa ngồi góc 45 độ (tư thế Fowler), nới lỏng quần áo. 3. Sẵn sàng ép tim CPR 110 BPM nếu bệnh nhân gục bất tỉnh ngừng thở!",
+    "detailed": "Phác đồ sơ cứu nhồi máu cơ tim: Đặt nghỉ tuyệt đối ở tư thế Fowler 45 độ, gọi 115 ngay, dùng thuốc xịt dưới lưỡi theo đơn bác sĩ tim mạch nếu có sẵn, theo dõi sát mạch thở để ép tim kịp thời."
+  },
+  {
+    "id": "stroke_fast",
+    "topic": "stroke",
+    "urgency": 0,
+    "comorbidRank": 1,
+    "initial": "🚨 CẢNH BÁO ĐỘT QUỴ NÃO (Quy tắc F.A.S.T / FAST): Face (Miệng méo xệ một bên) - Arm (Tay yếu rơi thõng) - Speech (Nói ngọng, ú ớ) - Time (Gọi ngay 115 đưa đến bệnh viện đột quỵ trong thời gian vàng 3 - 4.5 giờ)! Đặt nằm nghiêng đầu cao 30 độ, TUYỆT ĐỐI CẤM chích máu đầu ngón tay hay cạo gió!",
+    "detailed": "Kiểm tra nhanh F.A.S.T (FAST) cho đột quỵ não: Gọi 115 ngay trong thời gian vàng, đặt nằm nghiêng an toàn nếu nôn, ghi nhớ giờ khởi phát triệu chứng, cấm tuyệt đối chích lể hay tự cho uống thuốc hạ áp."
+  },
+  {
+    "id": "anaphylaxis_epipen",
+    "topic": "anaphylaxis",
+    "urgency": 0,
+    "comorbidRank": 1,
+    "initial": "🚨 CẢNH BÁO SỐC PHẢN VỆ ĐE DỌA TÍNH MẠNG! 1. Nếu có bút tiêm tự động Epinephrine (EpiPen), tiêm ngay vào mặt ngoài 1/3 giữa đùi giữ 5 giây. 2. Đặt nằm ngửa kê cao hai chân 30cm (hoặc nửa ngồi nếu khó thở rít), CẤM đứng dậy. 3. Gọi ngay 115 khẩn cấp!",
+    "detailed": "Xử trí SỐC PHẢN VỆ: Tiêm bắp Epinephrine (EpiPen) mặt ngoài đùi, nằm đầu thấp kê chân cao 30cm chống trụy mạch, gọi cấp cứu 115 ngay lập tức."
+  },
+  {
+    "id": "seizure_adult",
+    "topic": "seizure",
+    "urgency": 1,
+    "comorbidRank": 1,
+    "initial": "CẤP CỨU CO GIẬT: 1. Đặt nạn nhân nằm nơi an toàn thoáng rộng, lót gối/áo mềm dưới đầu. 2. TUYỆT ĐỐI CẤM nhét thìa, đũa, khăn hay ngón tay vào miệng và CẤM vắt chanh vào họng! 3. Khi dứt cơn giật, xoay sang tư thế nằm nghiêng an toàn và gọi 115 nếu giật quá 5 phút!",
+    "detailed": "Các bước bảo vệ nạn nhân CO GIẬT / động kinh: Dọn vật sắc nhọn xung quanh, kê êm đầu, CẤM nhét vật cứng vào miệng hay đè giữ tay chân, xoay nằm nghiêng an toàn sau cơn giật và gọi 115."
+  },
+  {
+    "id": "febrile_convulsion_child",
+    "topic": "febrileConvulsionChild",
+    "urgency": 1,
+    "comorbidRank": 1,
+    "initial": "Xử trí sốt cao co giật ở trẻ nhỏ: 1. Đặt bé nằm nghiêng sang một bên ở nơi an toàn để đờm nhớt thoát ra. 2. TUYỆT ĐỐI CẤM nhét bất cứ vật gì vào miệng bé hay vắt chanh! 3. Nới rộng quần áo, lau mát bằng khăn ấm 36-37°C ở nách, bẹn. 4. Sau khi hết cơn giật, đặt viên đạn Paracetamol vào hậu môn (10-15mg/kg) và đưa đi viện!",
+    "detailed": "Cấp cứu trẻ sốt cao co giật: Đặt nằm nghiêng thông đường thở, CẤM nhét tay/thìa vào miệng, lau ấm nách bẹn, dùng thuốc hạ sốt đặt hậu môn sau cơn giật và khám cấp cứu nhi khoa."
+  },
+  {
+    "id": "fainting_syncope",
+    "topic": "fainting",
+    "urgency": 2,
+    "initial": "Sơ cứu người bị ngất xỉu: Đặt nằm ngửa nơi thoáng mát, nới lỏng cổ áo và thắt lưng, kê cao hai chân khoảng 30 cm để máu dồn về não. TUYỆT ĐỐI KHÔNG đổ nước hay vắt chanh vào miệng khi chưa tỉnh hẳn. Nếu sau 2 phút không tỉnh hoặc ngừng thở, gọi 115 ngay!",
+    "detailed": "Khi gặp người ngất xỉu: Đặt nằm phẳng kê chân cao 30cm, kiểm tra nhịp thở liên tục, chỉ cho uống nước ấm khi đã tỉnh táo hoàn toàn."
+  },
+  {
+    "id": "hypoglycemia_15",
+    "topic": "hypoglycemia",
+    "urgency": 1,
+    "initial": "Nghi ngờ cơn hạ đường huyết cấp! Áp dụng ngay quy tắc 15-15: Nếu người bệnh còn tỉnh và nuốt được, cho uống ngay 15g đường nhanh (1/2 cốc nước đường ấm, nước ngọt có đường hoặc 3-4 viên kẹo), ngồi nghỉ 15 phút kiểm tra lại. Nếu lơ mơ hôn mê: CẤM đổ nước vào miệng, đặt nằm nghiêng và gọi 115!",
+    "detailed": "Xử trí hạ đường huyết (tay run, vã mồ hôi lạnh, đói cồn cào): Bổ sung ngay nước đường ấm theo quy tắc 15-15 khi còn tỉnh, sau khi hồi phục cho ăn thêm bánh mì/cháo."
+  },
+  {
+    "id": "high_bp_crisis",
+    "topic": "highBloodPressure",
+    "urgency": 1,
+    "initial": "Xử trí cơn tăng huyết áp cấp (> 180 mmHg): 1. Cho người bệnh nghỉ ngơi yên tĩnh, nằm hoặc ngồi tựa đầu cao 30 độ, hít thở sâu chậm. 2. Uống thuốc hạ áp hàng ngày theo đơn nếu quên liều, CẤM tự ý nhỏ/ngậm thuốc hạ áp nhanh dưới lưỡi gây thiếu máu não. 3. Nếu huyết áp > 180 mmHg kèm đau ngực, mờ mắt, đau đầu dữ dội -> gọi 115 đi viện ngay!",
+    "detailed": "Cơn tăng huyết áp khẩn cấp: Nghỉ tĩnh tư thế đầu cao 30 độ, đo lại sau 15 phút, đưa cấp cứu nếu huyết áp trên 180 mmHg hoặc có dấu hiệu tổn thương cơ quan đích."
+  },
+  {
+    "id": "snake_bite",
+    "topic": "snakeBite",
+    "urgency": 0,
+    "comorbidRank": 2,
+    "initial": "SƠ CỨU RẮN ĐỘC CẮN: 1. Yêu cầu nạn nhân nằm yên bất động hoàn toàn (vận động làm nọc độc lan nhanh qua hệ bạch huyết). 2. Tháo nhẫn/vòng và đặt chi bị cắn THẤP HƠN tim. 3. Rửa nhẹ bằng nước sạch, băng ép bất động vừa phải (vẫn bắt được mạch). TUYỆT ĐỐI CẤM rạch da hút nọc và CẤM thắt garo chặt làm hoại tử chi! Đưa ngay tới bệnh viện có huyết thanh kháng nọc!",
+    "detailed": "Nguyên tắc vàng khi bị rắn cắn: Bất động chi, giữ vết cắn THẤP HƠN tim, cấm rạch nặn máu hay đắp lá, chuyển nhanh đến trung tâm chống độc truyền huyết thanh kháng nọc."
+  },
+  {
+    "id": "heat_stroke",
+    "topic": "heatStroke",
+    "urgency": 1,
+    "initial": "CẤP CỨU SAY NẮNG / SỐC NHIỆT: 1. Đưa ngay nạn nhân vào bóng râm mát hoặc phòng điều hòa. 2. Cởi bớt quần áo dày, chườm khăn ướt mát vào cổ, hai hõm nách và hai bẹn kết hợp quạt thoáng để hạ thân nhiệt tích cực. 3. Nếu tỉnh táo cho uống từng ngụm Oresol mát; nếu sốt > 40°C lơ mơ gọi ngay 115!",
+    "detailed": "Hạ thân nhiệt khẩn cấp cho sốc nhiệt: Chuyển vào nơi râm mát, lau mát cổ-nách-bẹn, bù điện giải Oresol nếu tỉnh, gọi 115 nếu rối loạn tri giác."
+  },
+  {
+    "id": "poisoning_acute",
+    "topic": "poisoning",
+    "urgency": 0,
+    "initial": "CẤP CỨU NGỘ ĐỘC CẤP: Kiểm tra ngay chất vừa uống nhầm và giữ lại vỏ chai/nhãn thuốc mang theo đến viện! Nếu uống nhầm thuốc trừ sâu, axit, xút tẩy rửa hoặc xăng dầu -> TUYỆT ĐỐI CẤM GÂY NÔN vì gây bỏng rách thực quản và sặc phổi! Gọi ngay 115 đưa đến Trung tâm Chống độc!",
+    "detailed": "Xử trí ngộ độc hóa chất/thuốc sâu: Không gây nôn với chất ăn mòn hay người lơ mơ, rửa sạch da/mắt nếu dính thuốc, đem theo mẫu vỏ thuốc đến bệnh viện cấp cứu."
+  },
+  {
+    "id": "acute_abdomen",
+    "topic": "acuteAbdomen",
+    "urgency": 1,
+    "initial": "CẢNH BÁO ĐAU BỤNG CẤP NGOẠI KHOA (nghi viêm ruột thừa / thủng tạng rỗng): 1. Cho nằm yên co nhẹ hai đầu gối giảm căng cơ bụng. 2. TUYỆT ĐỐI CẤM tự uống thuốc giảm đau (làm che lấp triệu chứng mổ cấp cứu), CẤM chườm nóng và nhịn ăn uống hoàn toàn. 3. Đưa đến bệnh viện ngoại khoa khám ngay!",
+    "detailed": "Đau bụng cứng như gỗ hoặc khu trú hố chậu phải là cấp cứu ngoại khoa: CẤM uống thuốc giảm đau, cấm thụt tháo, nhịn ăn uống và nhập viện ngay."
+  },
+  {
+    "id": "gerd_heartburn",
+    "topic": "gerdHeartburn",
+    "urgency": 3,
+    "initial": "Xử trí trào ngược dạ dày thực quản (GERD): Uống từng ngụm nước ấm trung hòa axit, ngồi thẳng lưng hoặc kê cao đầu giường, nới lỏng thắt lưng và không nằm ngay sau ăn. Lưu ý quan trọng: Nếu đau rát ngực lan lên hàm/tay trái kèm vã mồ hôi khó thở, phải đi khám ngay để loại trừ nhồi máu cơ tim!",
+    "detailed": "Giảm cơn ợ nóng trào ngược dạ dày (GERD): Ngồi thẳng, uống nước ấm hoặc gel kháng axit, tránh đồ chua cay; luôn cảnh giác phân biệt với cơn đau thắt ngực nhồi máu cơ tim."
+  },
+  {
+    "id": "gout_acute",
+    "topic": "goutAttack",
+    "urgency": 3,
+    "initial": "Xử trí cơn gút cấp tính (sưng nóng đỏ đau dữ dội khớp ngón chân cái): 1. Kê cao chân lên gối mềm, nghỉ vận động khớp đau. 2. Chườm mát quanh khớp 15 phút giảm viêm (không đắp lá nóng). 3. Uống nhiều nước lọc (2-3 lít/ngày) hỗ trợ đào thải axit uric và dùng thuốc kháng viêm theo đơn bác sĩ.",
+    "detailed": "Chăm sóc cơn gút cấp tính: Kê cao bàn chân, chườm mát giảm sưng nóng, uống nhiều nước lọc giảm axit uric và kiêng hoàn toàn bia rượu, hải sản, nội tạng."
+  },
+  {
+    "id": "back_pain_sciatica",
+    "topic": "backPainSciatica",
+    "urgency": 2,
+    "initial": "Xử trí đau thắt lưng cấp / nghi thoát vị đĩa đệm chèn ép thần kinh tọa: Nằm nghỉ trên đệm cứng phẳng, kê gối mỏng dưới kheo chân giảm tải cột sống. TUYỆT ĐỐI CẤM dẫm lưng hay bẻ vặn cột sống đột ngột! Đi viện ngay nếu tê liệt chân hoặc bí tiểu tiện.",
+    "detailed": "Đau thắt lưng lan xuống chân (thoát vị đĩa đệm): Nằm đệm cứng kê gối dưới gối, chườm lạnh 48h đầu, tránh cúi bê vật nặng và khám chuyên khoa cột sống."
+  },
+  {
+    "id": "tooth_knocked_out",
+    "topic": "toothKnockedOut",
+    "urgency": 1,
+    "initial": "SƠ CỨU RĂNG BỊ RƠI KHỎI Ổ: 1. Cầm vào phần thân răng trắng, TUYỆT ĐỐI KHÔNG chạm hay cạo rửa phần chân răng! 2. Tráng nhẹ qua nước muối sinh lý nếu dính cát, sau đó ngâm ngay răng vào cốc sữa tươi không đường (hoặc nước muối sinh lý). 3. Đến nha sĩ trong vòng 1 giờ vàng để trồng cấy lại!",
+    "detailed": "Bảo quản RĂNG BỊ RƠI: Cầm thân răng, ngâm trong sữa tươi tiệt trùng không đường hoặc nước muối 0.9%, đến phòng khám Răng Hàm Mặt trong 1 giờ vàng."
+  },
+  {
+    "id": "mental_crisis_grounding",
+    "topic": "mentalCrisis",
+    "urgency": 2,
+    "initial": "Bạn bình tĩnh nhé, tôi luôn ở đây đồng hành cùng bạn! Hãy ngồi tựa lưng thoải mái, cùng hít sâu bằng mũi trong 4 giây, giữ nhẹ 4 giây và thở ra thật chậm trong 4 giây. Sau đó áp dụng bài tập tiếp đất 5-4-3-2-1 quan sát xung quanh để tâm trí dịu lại nhé!",
+    "detailed": "Kỹ thuật ổn định tâm thần kinh tức thì: 1. Hít thở hộp Box Breathing (4 giây hít - 4 giây giữ - 4 giây thở - 4 giây nghỉ). 2. Bài tập tiếp đất 5-4-3-2-1 (nhìn 5 vật, chạm 4 bề mặt, nghe 3 âm thanh, ngửi 2 mùi hương, nhủ 1 điều an toàn). Nếu quá tải hoặc khủng hoảng nặng, hãy gọi tổng đài hỗ trợ 19009095 hoặc 115."
+  },
+  {
+    "id": "panic_attack",
+    "topic": "panicAttack",
+    "urgency": 2,
+    "initial": "Các dấu hiệu tim đập loạn, hụt hơi kèm nỗi sợ kịch phát gợi ý một cơn hoảng loạn (Panic Attack). Cơn này sẽ tự dịu xuống sau vài phút: Hãy ngồi yên, đặt tay lên bụng hít vào chậm trong 4 giây và thở ra chúm môi chậm 6 giây, tập trung đếm nhịp thở đều đặn nhé!",
+    "detailed": "Vượt qua cơn hoảng loạn (Panic Attack): Hít vào bằng mũi 4 giây phình bụng, thở ra chậm 6 giây chống tăng thông khí, kết hợp tiếp đất 5-4-3-2-1."
+  },
+  {
+    "id": "paederus_beetle",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "XỬ TRÍ TIẾP XÚC ĐỘC TỐ KIẾN BA KHOANG (pederin):\n1. Rửa nhẹ nhàng vùng da tiếp xúc ngay dưới vòi nước sạch với xà phòng dịu hoặc nước muối sinh lý NaCl 0.9%.\n2. TUYỆT ĐỐI KHÔNG gãi, chà xát hay đập dập kiến trên da làm độc tố pederin loang rộng gây bỏng rát vệt dài.\n3. Chườm mát làm dịu da, bôi hồ nước / kem kẽm oxit và đi khám chuyên khoa nếu vết thương ở gần mắt.",
+    "detailed": "Viêm da tiếp xúc do độc tố pederin của KIẾN BA KHOANG: Rửa sạch bằng nước muối sinh lý, TUYỆT ĐỐI KHÔNG chà gãi làm vỡ bọng nước, bôi hồ nước làm dịu."
+  },
+  {
+    "id": "caterpillar_hairs",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "XỬ TRÍ DỊ ỨNG LÔNG SÂU RÓM:\n1. Dùng băng dính dán nhẹ lên vùng da bị bám lông rồi bóc ra nhiều lần để lấy sạch toàn bộ gai lông độc nhỏ li ti.\n2. Rửa sạch da dưới vòi nước mát và xà phòng, TUYỆT ĐỐI KHÔNG dùng tay gãi chà làm gai lông đâm sâu thêm.\n3. Chườm lạnh 10-15 phút để giảm ngứa buốt.",
+    "detailed": "Loại bỏ lông SÂU RÓM: Dùng băng dính lấy sạch gai lông trên bề mặt da, rửa nước xà phòng sạch và Chườm lạnh giảm sưng rát."
+  },
+  {
+    "id": "caffeine_jitters",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "XỬ TRÍ SAY CÀ PHÊ (HỒI HỘP TIM ĐẬP NHANH):\n1. Ngừng uống thêm đồ chứa caffeine; uống từ từ 2-3 cốc nước lọc ấm để tăng đào thải caffeine qua thận.\n2. Ngồi nghỉ ở nơi thoáng mát, nới lỏng áo và tập hít thở sâu chậm rãi để làm dịu nhịp tim.\n3. Ăn nhẹ tinh bột (bánh mì, chuối chín) nếu bụng đang rỗng.",
+    "detailed": "Giảm triệu chứng SAY CÀ PHÊ: Bổ sung nhiều nước lọc ấm, ăn nhẹ chống cồn cào dạ dày và hít thở sâu điều hòa thần kinh thực vật."
+  },
+  {
+    "id": "postural_hypotension",
+    "topic": "fainting",
+    "urgency": 2,
+    "initial": "XỬ TRÍ TỤT HUYẾT ÁP TƯ THẾ:\n1. Đỡ người bệnh nằm ngửa ngay trên mặt phẳng thoáng gió, kê hai chân cao hơn đầu khoảng 20-30cm để tăng máu về não.\n2. Nếu người bệnh tỉnh táo hoàn toàn, cho uống một cốc trà gừng ấm, nước đường ấm hoặc nước muối loãng.\n3. Khi đỡ choáng, hướng dẫn ngồi dậy từ từ từng nấc, không đứng bật dậy đột ngột.",
+    "detailed": "Chăm sóc TỤT HUYẾT ÁP choáng váng: Nằm kê hai chân cao 20-30cm, uống trà gừng ấm khi tỉnh táo và theo dõi huyết áp."
+  },
+  {
+    "id": "calf_cramp",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "XỬ TRÍ CHUỘT RÚT BẮP CHÂN (VỌP BẺ):\n1. Dừng vận động, ngồi xuống duỗi thẳng chân bị co cứng và dùng tay kéo ngược ngón chân / mũi bàn chân hướng về phía đầu gối giữ 20-30 giây.\n2. Xoa bóp nhẹ nhàng dọc cơ bắp chuối và chườm ấm sau khi cơ đã nhả.\n3. Uống nước ấm hoặc Oresol bù điện giải.",
+    "detailed": "Giải cơ CHUỘT RÚT nhanh: Ngồi duỗi thẳng chân, kéo ngược ngón chân về phía thân mình để kéo giãn cơ bụng chân, kết hợp xoa ấm."
+  },
+  {
+    "id": "welder_flash_eye",
+    "topic": "eyeInjury",
+    "urgency": 2,
+    "initial": "XỬ TRÍ ĐAU MẮT HÀN (BỎNG GIÁC MẠC DO TIA CỰC TÍM):\n1. Nhỏ rửa mắt liên tục bằng nước muối sinh lý NaCl 0.9% vô khuẩn để làm dịu bề mặt giác mạc, TUYỆT ĐỐI KHÔNG dụi mắt.\n2. Nhắm mắt nghỉ trong phòng tối và Chườm lạnh bằng khăn sạch mát bên ngoài mi mắt giảm sưng rát.\n3. Đi khám chuyên khoa Mắt nếu nhìn mờ hoặc đau nhức kéo dài.",
+    "detailed": "Sơ cứu ĐAU MẮT HÀN: Nhỏ nước muối sinh lý 0.9% và nước mắt nhân tạo, Chườm lạnh ngoài mi mắt, đeo kính râm bảo vệ mắt."
+  },
+  {
+    "id": "herpes_zoster_shingles",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "XỬ TRÍ BỆNH ZONA THẦN KINH (GIỜI LEO):\n1. Rửa nhẹ vùng mụn nước bằng nước muối sinh lý 0.9%, giữ khô thoáng sạch sẽ và đi khám sớm trong 72 giờ đầu để bác sĩ kê thuốc kháng virus Acyclovir.\n2. TUYỆT ĐỐI KHÔNG nhai đỗ xanh, gạo nếp, đắp lá cây hay khoán mực lên vết giời leo vì gây nhiễm trùng loét sâu để lại sẹo đau thần kinh!",
+    "detailed": "Chăm sóc ZONA thần kinh: Giữ sạch mụn nước, khám dùng Acyclovir chuẩn y khoa trong 72h vàng, TUYỆT ĐỐI KHÔNG nhai đỗ xanh đắp lên tổn thương."
+  },
+  {
+    "id": "clarify_child_fever",
+    "topic": "febrileConvulsionChild",
+    "urgency": 2,
+    "isClarification": true,
+    "clarificationTag": "child_fever",
+    "initial": "Bé sốt đo được bao nhiêu độ? Bé được mấy tháng hoặc mấy tuổi? Bé có biểu hiện co giật chân tay, li bì hay nôn trớ không?",
+    "detailed": "Bé sốt đo được bao nhiêu độ? Bé mấy tuổi và có kèm co giật hay li bì không?"
+  },
+  {
+    "id": "clarify_vague_fall",
+    "topic": "vagueTrauma",
+    "urgency": 2,
+    "isClarification": true,
+    "clarificationTag": "vague_trauma",
+    "initial": "Tôi đã ghi nhận bạn vừa bị tai nạn hoặc ngã. Nạn nhân có va đập đầu bất tỉnh không? Cổ và lưng có bị đau nhức hay tay chân có bị biến dạng gãy xương không? Hãy cho tôi biết ngay!",
+    "detailed": "Nạn nhân có va đập đầu bất tỉnh, đau cột sống Cổ và lưng hay biến dạng gãy xương chi không?"
+  },
+  {
+    "id": "clarify_allergy",
+    "topic": "anaphylaxis",
+    "urgency": 2,
+    "isClarification": true,
+    "clarificationTag": "allergy",
+    "initial": "Bạn đang bị nổi mẩn ngứa ở da hay có kèm theo sưng phù môi mắt, khàn tiếng hoặc khó thở rít không? Bạn vừa ăn món gì hay bị côn trùng đốt?",
+    "detailed": "Bạn chỉ nổi mẩn ngứa ngoài da hay có sưng phù môi mắt và khó thở rít?"
+  },
+  {
+    "id": "clarify_chest_pain",
+    "topic": "heartAttack",
+    "urgency": 1,
+    "isClarification": true,
+    "clarificationTag": "chest_pain",
+    "initial": "Cơn đau ngực của bạn có cảm giác đè nặng bóp nghẹt lan ra vai/tay trái (dấu hiệu tim mạch), hay đau nhói rát tăng lên khi hít thở sâu/vận động (dấu hiệu cơ/màng phổi)?",
+    "detailed": "Cơn đau đè nặng bóp nghẹt lan ra vai/tay trái hay đau nhói khi hít thở sâu?"
+  },
+  {
+    "id": "clarify_headache",
+    "topic": "headacheMigraine",
+    "urgency": 2,
+    "isClarification": true,
+    "clarificationTag": "headache",
+    "initial": "Cơn đau đầu xuất hiện từ từ hay bộc phát dữ dội đột ngột như sét đánh? Bạn có kèm sốt cứng cổ, buồn nôn, méo mặt hay yếu tay chân không?",
+    "detailed": "Đau đầu xuất hiện từ từ hay bộc phát dữ dội như sét đánh, có kèm cứng cổ hay buồn nôn không?"
+  },
+  {
+    "id": "closed_head_trauma",
+    "topic": "headTrauma",
+    "urgency": 1,
+    "initial": "Tôi ghi nhận bạn bị va chạm/đánh vào vùng đầu (chấn thương đầu kín, hiện tỉnh táo, không nôn vọt):\n1. Chườm lạnh ngay bằng túi đá bọc khăn lên vùng sưng đau 15-20 phút (không chườm nóng/xoa dầu).\n2. Nằm nghỉ yên tĩnh, kê đầu cao 20-30 độ.\n3. Nếu đau có thể dùng Paracetamol; TUYỆT ĐỐI KHÔNG dùng Aspirin hoặc Ibuprofen vì nguy cơ làm tăng xuất huyết nội sọ.\n4. THEO DÕI SÁT TRONG 24-48 GIỜ: Gọi 115 ngay nếu xuất hiện nôn vọt, lơ mơ ngủ gà hoặc đau đầu tăng dữ dội!",
+    "detailed": "Phác đồ theo dõi chấn thương đầu kín sau va chạm/đánh vào vùng đầu 24-48 GIỜ: Chườm lạnh tại chỗ, nghỉ tĩnh, TUYỆT ĐỐI KHÔNG dùng Aspirin, nhập viện ngay nếu nôn vọt hoặc rối loạn ý thức."
+  },
+  {
+    "id": "clarify_vague_pain",
+    "topic": "vaguePain",
+    "urgency": 3,
+    "isClarification": true,
+    "clarificationTag": "vague_pain",
+    "initial": "Bạn đang bị đau ở vùng nào cụ thể trên cơ thể: ngực, bụng, đầu, lưng, hay tay chân? Cơn đau nhói buốt đột ngột hay âm ỉ quặn thắt? Hãy mô tả thêm để tôi hướng dẫn sơ cứu chuẩn xác nhất nhé!",
+    "detailed": "Vui lòng cho biết vùng nào cụ thể đang đau (ngực, bụng, đầu, hay tay chân)?"
+  },
+  {
+    "id": "clarify_vague_fatigue",
+    "topic": "vagueFatigue",
+    "urgency": 3,
+    "isClarification": true,
+    "clarificationTag": "vague_fatigue",
+    "initial": "Tình trạng mệt mỏi của bạn như thế nào: Bạn có bị run rẩy đói lả (nghi hạ đường huyết), khó thở hụt hơi (nghi tim phổi), hay hoa mắt chóng mặt đứng không vững không? Nói rõ để tôi trợ giúp ngay nhé!",
+    "detailed": "Bạn mệt kèm đói run tay (hạ đường huyết) hay kèm khó thở, chóng mặt?"
+  },
+  {
+    "id": "greeting_assistant",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "Chào bạn! Trợ lý Sơ cứu Cấp cứu ResQ-Aid đang lắng nghe đây. Bạn hoặc người thân đang gặp chấn thương, vết thương hay triệu chứng khẩn cấp nào? Hãy mô tả ngay để tôi hướng dẫn từng bước!",
+    "detailed": "Trợ lý Sơ cứu Cấp cứu ResQ-Aid luôn sẵn sàng đang lắng nghe bạn 100% ngoại tuyến."
+  },
+  {
+    "id": "general_hot_weather_care",
+    "topic": "general",
+    "urgency": 3,
+    "initial": "Hướng dẫn dự phòng tai biến sức khỏe mùa nắng nóng: 1. Uống đủ 2 - 2.5 lít nước lọc và bổ sung điện giải mỗi ngày, không đợi khát mới uống. 2. Hạn chế lao động ngoài trời nắng gắt từ 11h đến 15h, đội mũ rộng vành thoáng khí. 3. Tránh bước vào phòng máy lạnh quá sâu ngay khi vừa đi nắng về để phòng sốc nhiệt và đột quỵ.",
+    "detailed": "Chăm sóc sức khỏe mùa nắng nóng: Bù nước điện giải đều đặn, che chắn tia UV và tránh thay đổi nhiệt độ môi trường đột ngột."
+  },
+  {
+    "id": "seek_nearest_medical",
+    "topic": "general",
+    "urgency": 1,
+    "isFacilityLookup": true,
+    "initial": "Định vị Trạm Y Tế & Bệnh viện gần nhất ngoại tuyến.",
+    "detailed": "Định vị Trạm Y Tế & Bệnh viện gần nhất ngoại tuyến."
+  }
+]

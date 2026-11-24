@@ -1,0 +1,94 @@
+{
+  "real_elbow_abrasion.jpg": {
+    "category": "abrasion",
+    "description": "Vết trầy xước cùi chỏ rớm máu"
+  },
+  "real_knee_abrasion.jpg": {
+    "category": "abrasion",
+    "description": "Đầu gối ngã trầy rớm máu"
+  },
+  "real_whip_hematoma.jpg": {
+    "category": "bruise",
+    "description": "Vết bầm tím đòn roi tụ máu"
+  },
+  "real_finger_dislocation.jpg": {
+    "category": "fracture",
+    "description": "Ngón tay gãy / trật khớp 90 độ"
+  },
+  "real_blister_burn.jpg": {
+    "category": "burn_d2",
+    "description": "Vết bỏng nhiệt bọng nước"
+  },
+  "real_healthy_hand_middle.jpg": {
+    "category": "clean_skin",
+    "description": "Bàn tay giơ ngón giữa lành lặn"
+  },
+  "real_healthy_hand_darker.jpg": {
+    "category": "clean_skin",
+    "description": "Bàn tay lành lặn góc nghiêng"
+  },
+  "real_blurry_motion_wound.jpg": {
+    "category": "quality_fail_blurry",
+    "description": "Vết thương mờ nhòe do rung tay"
+  },
+  "real_knee_deep_wound.jpg": {
+    "category": "knee_wound",
+    "description": "Vết thương rách gối sâu"
+  },
+  "real_two_knees_wide.jpg": {
+    "category": "two_knees_viewfinder",
+    "description": "Hai đầu gối chụp xa"
+  },
+  "real_clean_hand_flat.jpg": {
+    "category": "clean_skin",
+    "description": "Mu bàn tay da người bình thường"
+  },
+  "real_elbow_scrape_macro.jpg": {
+    "category": "abrasion",
+    "description": "Cùi chỏ trầy xước chụp cận cảnh"
+  },
+  "real_hand_laceration.jpg": {
+    "category": "cut",
+    "description": "Vết cắt rách mô mềm mu bàn tay"
+  },
+  "real_toe_wound.jpg": {
+    "category": "cut",
+    "description": "Vết thương ngón chân"
+  },
+  "real_broken_skin_cut.jpg": {
+    "category": "cut",
+    "description": "Vết toác mép da hở"
+  },
+  "real_knuckle_healthy.jpg": {
+    "category": "clean_skin",
+    "description": "Khớp đốt ngón tay lành"
+  },
+  "real_hard_negative_red_cloth.jpg": {
+    "category": "object",
+    "description": "Vải áo màu đỏ tươi (Hard Negative - Không nhầm máu)"
+  },
+  "real_hard_negative_wood_desk.jpg": {
+    "category": "object",
+    "description": "Mặt bàn gỗ nâu / Bìa carton (Hard Negative - Không nhầm da/bỏng)"
+  },
+  "real_hard_negative_keyboard.jpg": {
+    "category": "object",
+    "description": "Bàn phím máy tính văn phòng (Hard Negative - Vật thể vô sinh P4)"
+  },
+  "real_dark_skin_healthy.jpg": {
+    "category": "clean_skin",
+    "description": "Da người sẫm màu tự nhiên (Monk Scale Type 8 - Da lành)"
+  },
+  "real_dark_skin_abrasion.jpg": {
+    "category": "abrasion",
+    "description": "Vết trầy xước rớm máu trên da người sẫm màu (Monk Scale)"
+  },
+  "real_yellow_lighting_hand.jpg": {
+    "category": "clean_skin",
+    "description": "Bàn tay dưới ánh đèn vàng ấm 2700K (Stress Test ánh sáng)"
+  },
+  "real_neon_lighting_scrape.jpg": {
+    "category": "abrasion",
+    "description": "Vết trầy xước dưới ánh đèn tuýp neon lạnh 6500K"
+  }
+}

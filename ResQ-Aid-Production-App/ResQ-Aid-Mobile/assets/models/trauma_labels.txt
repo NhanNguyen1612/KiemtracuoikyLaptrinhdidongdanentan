@@ -1,0 +1,12 @@
+0 Vết bỏng nước sôi / Bỏng nhiệt (Độ 2)
+1 Vết bỏng sâu hoại tử / Bỏng điện (Độ 3)
+2 Vết rách đứt động mạch chảy máu ồ ạt
+3 Gãy xương / Trật khớp ngón tay / Biến dạng chi thể (Cần nẹp bất động)
+4 Vết đứt tay / Rách da chảy máu mô mềm
+5 Vết thương hở sâu / Toác mép lộ cơ gân (Cần khâu y tế)
+6 Vết thương kim loại rỉ sét / Giẫm đinh (Nguy cơ uốn ván cao)
+7 Vết thương chó cắn / Động vật cào cắn (Nguy cơ bệnh dại)
+8 Tổn thương sưng tấy / Bầm tím tụ máu / Viêm mô
+9 Tổn thương da bình thường / Trầy xước nhẹ
+10 Da người lành lặn / Không có vết thương hở nguy hiểm
+11 Không phát hiện vết thương / Đồ vật thông thường (Bàn phím, bàn ghế, thiết bị...)
